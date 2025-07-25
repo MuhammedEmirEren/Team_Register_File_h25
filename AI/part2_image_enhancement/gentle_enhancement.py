@@ -8,10 +8,10 @@ def gentle_image_enhancement(image_path):
     Very gentle image enhancement - small improvements only
     """
     if not os.path.exists(image_path):
-        print(f"❌ Error: Image file '{image_path}' not found!")
+        print(f"Error: Image file '{image_path}' not found!")
         return False
     try:
-        print(f"🔧 Applying gentle enhancement...")
+        print(f"Applying gentle enhancement...")
         # Load image
         image = Image.open(image_path)
         # Convert to RGB if needed
@@ -66,11 +66,11 @@ def subtle_upscale(image, scale=1.5):
 
         upscaled = image.resize(new_size, Image.Resampling.LANCZOS)
         
-        print(f"📈 Gently upscaled: {original_size} → {new_size}")
+        print(f"Gently upscaled: {original_size} → {new_size}")
         return upscaled
         
     except Exception as e:
-        print(f"❌ Error in upscaling: {e}")
+        print(f"Error in upscaling: {e}")
         return image
 
 def main():
@@ -87,13 +87,13 @@ def main():
     enhanced_image = gentle_image_enhancement(image_path)
     
     if enhanced_image is False:
-        print("❌ Enhancement failed!")
+        print("Enhancement failed!")
         return
     
     # Save gentle enhancement
     gentle_output = os.path.join(script_dir, "gentle_enhanced.png")
     enhanced_image.save(gentle_output, quality=100)
-    print(f"📁 Gentle enhanced: {gentle_output}")
+    print(f"Gentle enhanced: {gentle_output}")
     
     # Option 2: Gentle enhancement + subtle upscale
     print("Applying gentle enhancement + subtle upscale...")
@@ -101,7 +101,7 @@ def main():
     
     upscaled_output = os.path.join(script_dir, "gentle_upscaled.png")
     upscaled_image.save(upscaled_output, quality=100)
-    print(f"📁 Gentle upscaled: {upscaled_output}")
+    print(f"Gentle upscaled: {upscaled_output}")
     
     # Create a simple comparison
     print("Creating comparison...")
@@ -124,7 +124,7 @@ def main():
     try:
         enhanced_image.show(title="Gentle Enhancement - Better Quality")
     except:
-        print("💡 Images saved. Check the files!")
+        print("sImages saved. Check the files!")
 
 if __name__ == "__main__":
     main()

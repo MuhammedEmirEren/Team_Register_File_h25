@@ -1,0 +1,29 @@
+from gradio_client import Client, handle_file
+def main():
+    # Initialize the Gradio client for fine-grain image enhancement
+    client = Client("finegrain/finegrain-image-enhancer")
+    result = client.predict(
+            input_image=handle_file('https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png'),
+            seed=42,
+            upscale_factor=2,
+            controlnet_scale=0.6,
+            controlnet_decay=1,
+            condition_scale=6,
+            tile_width=112,
+            tile_height=144,
+            denoise_strength=0.35,
+            num_inference_steps=18,
+            solver="DDIM",
+            api_name="/process"
+    )
+    # Get the image from url result[1]
+    image_url = result[1]
+    print(f"Image URL: {image_url}")
+    # Save the image to a file
+    import requests
+    response = requests.get(image_url)
+    with open("enhanced_image.png", "wb") as file:
+        file.write(response.content)
+    print("Enhanced image saved as 'enhanced_image.png'")
+if __name__ == "__main__":
+    main()
