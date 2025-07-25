@@ -5,7 +5,7 @@ import numpy as np
 def enhance_image_with_gemini(image_path):
     # --- Configuration ---
     # Configure the API key
-    genai.configure(api_key="AIzaSyDep0JCw8xC1DPL5_X5QaUk_ATYqd8ua1Q")
+    genai.configure(api_key="API_KEY_HERE")  # Replace with your actual API key
 
     # --- Load the Image ---
     img = PIL.Image.open(image_path)
