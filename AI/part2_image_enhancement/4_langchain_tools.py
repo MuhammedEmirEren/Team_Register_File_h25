@@ -64,11 +64,6 @@ def increase_brightness(image_path: str, factor: float) -> str:
         factor: Enhancement factor (e.g., 1.2 = 20% increase)
     """
     try:
-        # Handle dictionary input from LangChain
-        if isinstance(image_path, dict):
-            factor = image_path.get('factor', 1.2)
-            image_path = image_path.get('image_path', image_path)
-        
         print(f"🔧 Increasing brightness: {image_path}, factor: {factor}")
         
         with Image.open(image_path) as img:
@@ -92,11 +87,6 @@ def increase_contrast(image_path: str, factor: float) -> str:
         factor: Enhancement factor (e.g., 1.2 = 20% increase)
     """
     try:
-        # Handle dictionary input from LangChain
-        if isinstance(image_path, dict):
-            factor = image_path.get('factor', 1.2)
-            image_path = image_path.get('image_path', image_path)
-        
         print(f"🔧 Increasing contrast: {image_path}, factor: {factor}")
         
         with Image.open(image_path) as img:
@@ -120,11 +110,6 @@ def increase_sharpness(image_path: str, factor: float) -> str:
         factor: Enhancement factor (e.g., 1.2 = 20% increase)
     """
     try:
-        # Handle dictionary input from LangChain
-        if isinstance(image_path, dict):
-            factor = image_path.get('factor', 1.2)
-            image_path = image_path.get('image_path', image_path)
-        
         print(f"🔧 Increasing sharpness: {image_path}, factor: {factor}")
         
         with Image.open(image_path) as img:
@@ -148,11 +133,6 @@ def noise_reduction(image_path: str, radius: float) -> str:
         radius: Blur radius for noise reduction
     """
     try:
-        # Handle dictionary input from LangChain
-        if isinstance(image_path, dict):
-            radius = image_path.get('radius', 1.0)
-            image_path = image_path.get('image_path', image_path)
-        
         print(f"🔧 Applying noise reduction: {image_path}, radius: {radius}")
         
         with Image.open(image_path) as img:
@@ -169,9 +149,8 @@ def noise_reduction(image_path: str, radius: float) -> str:
 def create_image_enhancement_agent():
     """Creates an agent for image enhancement."""
     llm = ChatGoogleGenerativeAI(
-        model="gemini-1.5-flash",  # Changed to faster model with higher rate limits
-        google_api_key="AIzaSyAswUklZXdZFeEtEFzzKhGop8OdHEv4suM", # Replace with your API key
-        temperature=0.1,
+        model="gemini-2.5-flash",
+        google_api_key="Enter API Key" # Replace with your API key
     )
     
     tools = [
