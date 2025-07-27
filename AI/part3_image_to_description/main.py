@@ -19,3 +19,17 @@ async def generate_description(
     img_b64 = base64.b64encode(await image.read()).decode()
     result = generate_description_from_image(img_b64, tone, lang)
     return JSONResponse(content=result)
+
+@app.get("/")
+async def root():
+    return {"message": "AI Product Description Generator API", 
+            "docs": "Visit /docs for API documentation",
+            "health": "OK"}
+
+@app.get("/health")
+async def health():
+    return {"status": "healthy", "service": "AI Product Description Generator"}
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="127.0.0.1", port=8000)

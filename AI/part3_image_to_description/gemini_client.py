@@ -5,8 +5,8 @@ API_KEY = "API KEY HERE"           # ← keep your real key here
 
 genai.configure(api_key=API_KEY) # ← ONLY this line
 
-# multimodal model: 1.5-pro (latest)
-model = genai.GenerativeModel("models/gemini-1.5-pro-latest")
+# multimodal model: 2.5-pro (latest)
+model = genai.GenerativeModel("models/gemini-2.5-pro")
 
 
 def generate_description_from_image(image_b64: str,
