@@ -1,11 +1,10 @@
 import json
 import google.generativeai as genai
 
-API_KEY = "API KEY HERE"           # ← keep your real key here
+API_KEY = "Enter API Key"
 
 genai.configure(api_key=API_KEY) # ← ONLY this line
 
-# multimodal model: 2.5-pro (latest)
 model = genai.GenerativeModel("models/gemini-2.5-pro")
 
 
@@ -30,6 +29,6 @@ def generate_description_from_image(image_b64: str,
         try:
             return json.loads(text)
         except json.JSONDecodeError:
-            return {"raw_output": text}  # fallback for inspection
+            return {"raw_output": text}
     except Exception as err:
         return {"error": str(err)}
