@@ -5,15 +5,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from rembg import remove
 
-
-# Load model
 processor = OwlViTProcessor.from_pretrained("google/owlvit-base-patch32")
 model = OwlViTForObjectDetection.from_pretrained("google/owlvit-base-patch32")
 
-# Load image
 image = Image.open("C:/Users/Lenovo/OneDrive/Masaüstü/BİLKENT ÜNİVERSİTESİ/Internship/Python Codes/PyTorch/Hackathon/Shoe.jpg").convert("RGB")
 
-# Define the text prompt from user input
 texts = [[
     # 👕 Giyim
     "clothing",
@@ -90,14 +86,11 @@ texts = [[
 ]
 ]
 
-# Preprocess
 inputs = processor(text=texts, images=image, return_tensors="pt")
 
-# Predict
 with torch.no_grad():
     outputs = model(**inputs)
 
-# Post-process
 target_sizes = torch.tensor([image.size[::-1]])
 results = processor.post_process_grounded_object_detection(
     outputs=outputs,
@@ -106,7 +99,6 @@ results = processor.post_process_grounded_object_detection(
 )[0]
 print(results)
 
-# Visualize
 # plt.imshow(image)
 # ax = plt.gca()
 
@@ -201,22 +193,16 @@ print(results)
 
 for score, label_id, box in zip(results["scores"], results["labels"], results["boxes"]):
     if score < 0.05:
-        continue  # düşük skorluları atla
+        continue 
 
-    # Kutunun koordinatlarını al
     xmin, ymin, xmax, ymax = map(int, box.tolist())
-
-    # Görseli kırp
     cropped = image.crop((xmin, ymin, xmax, ymax))
 
-    # Etiketi al
     label = texts[0][label_id]
-
-    # Kaydet (isteğe bağlı)
+    
     #cropped.save(f"cropped_{label}_{round(score.item(), 2)}.png")
     cropped.save("cropped_image.png")
 
-    # İstersen göster
     cropped.show()
     
 input_image = Image.open("cropped_image.png")
