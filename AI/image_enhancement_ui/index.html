@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Image Enhancer - BTK Hackathon 2025</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-magic"></i>
+                    <h1>AI Image Enhancer</h1>
+                </div>
+                <div class="tagline">
+                    <p>Intelligent image enhancement powered by AI</p>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Upload Section -->
+            <section class="upload-section" id="uploadSection">
+                <div class="upload-container">
+                    <div class="upload-area" id="uploadArea">
+                        <div class="upload-icon">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="upload-text">
+                            <h3>Drop your image here or click to browse</h3>
+                            <p>Supports PNG, JPG, JPEG formats • Max size: 10MB</p>
+                        </div>
+                        <input type="file" id="fileInput" accept="image/*" hidden>
+                        <button class="browse-btn" onclick="document.getElementById('fileInput').click()">
+                            Browse Files
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Processing Section -->
+            <section class="processing-section" id="processingSection" style="display: none;">
+                <div class="processing-container">
+                    <div class="image-preview">
+                        <div class="preview-card original">
+                            <h4><i class="fas fa-image"></i> Original Image</h4>
+                            <div class="image-container">
+                                <img id="originalImage" src="" alt="Original">
+                            </div>
+                            <div class="image-info" id="originalInfo">
+                                <span class="info-item"><i class="fas fa-expand-arrows-alt"></i> Loading...</span>
+                            </div>
+                        </div>
+                        
+                        <div class="process-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        
+                        <div class="preview-card enhanced">
+                            <h4><i class="fas fa-sparkles"></i> Enhanced Image</h4>
+                            <div class="image-container">
+                                <img id="enhancedImage" src="" alt="Enhanced" style="display: none;">
+                                <div class="loading-placeholder" id="loadingPlaceholder">
+                                    <div class="spinner"></div>
+                                    <p>AI is analyzing and enhancing your image...</p>
+                                </div>
+                            </div>
+                            <div class="image-info" id="enhancedInfo" style="display: none;">
+                                <span class="info-item"><i class="fas fa-check-circle"></i> Enhanced</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Enhancement Progress -->
+                    <div class="enhancement-progress" id="enhancementProgress">
+                        <h4><i class="fas fa-cogs"></i> AI Enhancement Process</h4>
+                        <div class="progress-steps">
+                            <div class="step" id="step1">
+                                <div class="step-icon">
+                                    <i class="fas fa-search"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>Analyzing Image</h5>
+                                    <p>AI is examining your image properties...</p>
+                                </div>
+                                <div class="step-status">
+                                    <div class="spinner-small"></div>
+                                </div>
+                            </div>
+                            
+                            <div class="step" id="step2">
+                                <div class="step-icon">
+                                    <i class="fas fa-brain"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>Deciding Enhancements</h5>
+                                    <p>Choosing optimal enhancement strategy...</p>
+                                </div>
+                                <div class="step-status">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="step" id="step3">
+                                <div class="step-icon">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>Applying Enhancements</h5>
+                                    <p>Brightness, contrast, sharpness optimization...</p>
+                                </div>
+                                <div class="step-status">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                            
+                            <div class="step" id="step4">
+                                <div class="step-icon">
+                                    <i class="fas fa-download"></i>
+                                </div>
+                                <div class="step-content">
+                                    <h5>Ready for Download</h5>
+                                    <p>Your enhanced image is ready!</p>
+                                </div>
+                                <div class="step-status">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="action-buttons" id="actionButtons" style="display: none;">
+                        <button class="btn btn-primary" id="downloadBtn">
+                            <i class="fas fa-download"></i>
+                            Download Enhanced Image
+                        </button>
+                        <button class="btn btn-secondary" id="newImageBtn">
+                            <i class="fas fa-plus"></i>
+                            Enhance Another Image
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Features Section -->
+            <section class="features-section" id="featuresSection">
+                <div class="features-container">
+                    <h2>Intelligent AI Enhancement Features</h2>
+                    <div class="features-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <h3>Smart Analysis</h3>
+                            <p>AI analyzes your image to identify brightness, contrast, and quality issues automatically</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-sun"></i>
+                            </div>
+                            <h3>Brightness Optimization</h3>
+                            <p>Intelligently adjusts lighting to bring out details without overexposure</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-adjust"></i>
+                            </div>
+                            <h3>Dynamic Contrast</h3>
+                            <p>Enhances contrast to make your images more vibrant and appealing</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-crosshairs"></i>
+                            </div>
+                            <h3>Sharpness Enhancement</h3>
+                            <p>Improves image clarity and detail definition for crisp, professional results</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-filter"></i>
+                            </div>
+                            <h3>Noise Reduction</h3>
+                            <p>Removes grain and noise while preserving important image details</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i class="fas fa-bolt"></i>
+                            </div>
+                            <h3>Lightning Fast</h3>
+                            <p>Powered by optimized AI algorithms for quick processing and results</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-content">
+                <p>&copy; 2025 BTK Hackathon - Team Register File H25. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#"><i class="fab fa-github"></i> GitHub</a>
+                    <a href="#"><i class="fas fa-info-circle"></i> About</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Success Modal -->
+    <div class="modal" id="successModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3><i class="fas fa-check-circle"></i> Enhancement Complete!</h3>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p>Your image has been successfully enhanced with AI-powered optimizations.</p>
+                <div class="enhancement-summary" id="enhancementSummary">
+                    <!-- Dynamic enhancement details will be inserted here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

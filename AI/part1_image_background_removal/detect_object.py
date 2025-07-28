@@ -4,14 +4,17 @@ import torch
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from rembg import remove
+import os
 
 processor = OwlViTProcessor.from_pretrained("google/owlvit-base-patch32")
 model = OwlViTForObjectDetection.from_pretrained("google/owlvit-base-patch32")
 
-image = Image.open("C:/Users/Lenovo/OneDrive/Masaüstü/BİLKENT ÜNİVERSİTESİ/Internship/Python Codes/PyTorch/Hackathon/Shoe.jpg").convert("RGB")
+script_dir = os.path.dirname(os.path.abspath(__file__))
+image_path = os.path.join(script_dir, "Shoe.png")
+image = Image.open(image_path).convert("RGB")
 
 texts = [[
-    # 👕 Giyim
+    # Giyim
     "clothing",
     "topwear",
     "bottomwear",
@@ -23,13 +26,13 @@ texts = [[
     "dress",
     "outfit",
 
-    # 👞 Ayakkabı
+    # Ayakkabı
     "footwear",
     "shoes",
     "boots",
     "sneakers",
 
-    # 👜 Aksesuarlar
+    # Aksesuarlar
     "accessory",
     "bag",
     "backpack",
@@ -43,7 +46,7 @@ texts = [[
     "watch",
     "jewelry",
 
-    # 💻 Elektronik
+    # Elektronik
     "electronics",
     "device",
     "gadget",
@@ -53,7 +56,7 @@ texts = [[
     "headphones",
     "smartwatch",
 
-    # 💄 Kozmetik / Kişisel Bakım
+    # Kozmetik / Kişisel Bakım
     "cosmetics",
     "beauty product",
     "skincare",
@@ -61,14 +64,14 @@ texts = [[
     "perfume",
     "hair product",
 
-    # 👶 Bebek ve çocuk
+    # Bebek ve çocuk
     "baby product",
     "baby clothes",
     "toy",
     "stroller",
     "pacifier",
 
-    # 🏠 Ev ve yaşam
+    # Ev ve yaşam
     "home item",
     "furniture",
     "appliance",
@@ -77,7 +80,7 @@ texts = [[
     "bedding",
     "cleaning tool",
 
-    # 🏋️ Spor ve outdoor
+    # Spor ve outdoor
     "sports gear",
     "fitness equipment",
     "gym accessory",
