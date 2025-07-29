@@ -16,7 +16,7 @@ import json
 import google.generativeai as genai
 import base64
 from langchain_google_genai import ChatGoogleGenerativeAI
-from AI.merged_models_and_api.image_enhancement_option3_helper import image_enhancement_option3_helper
+import image_enhancement_option3_helper
 
 class process_image:
     def __init__(self):
@@ -98,8 +98,16 @@ class process_image:
     def enhance_image_option2(self):
 
         client = Client("finegrain/finegrain-image-enhancer")
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        output_path = os.path.join(script_dir, "temp_image.png")
+
+        self.no_background_image.save(output_path)
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        temp_image_path = os.path.join(script_dir, "temp_image.png")
         result = client.predict(
-                input_image=self.no_background_image,
+                input_image=handle_file(temp_image_path),
                 prompt="",
                 negative_prompt="",
                 seed=0,
@@ -134,10 +142,10 @@ class process_image:
             except Exception as e2:
                 print(f"Error saving with PIL: {e2}")
 
-        self.enhanced_image_2 = Image.open(output_path)
+        self.enhanced_image_2 = Image.open(output_path)     
 
     def enhance_image_option3(self):
-        enhancer = image_enhancement_option3_helper()
+        enhancer = image_enhancement_option3_helper.image_enhancement_option3_helper(model=None)
         self.enhanced_image_3 = enhancer.ai_enhanced_image_processing(self.no_background_image)
 
     def generate_description_from_image(self, image_b64: str,
@@ -147,7 +155,7 @@ class process_image:
 
         genai.configure(api_key=API_KEY) # ← ONLY this line
 
-        model = genai.GenerativeModel("models/gemini-2.5-pro")7
+        model = genai.GenerativeModel("models/gemini-2.5-pro")
 
         prompt = (
             f"Generate an SEO-optimised e-commerce product listing in {lang}. "
@@ -184,7 +192,10 @@ class process_image:
         
 
     def generate_description(self):
-        img_b64 = base64.b64encode(self.chosen_image.read()).decode()
+        from io import BytesIO
+        buffer = BytesIO()
+        self.chosen_image.save(buffer, format='JPEG')
+        img_b64 = base64.b64encode(buffer.getvalue()).decode()
         tone = "professional"
         lang = "en"
         self.description = self.generate_description_from_image(img_b64, tone, lang)
@@ -192,7 +203,7 @@ class process_image:
     def process(self, image_path):
         script_dir = os.path.dirname(os.path.abspath(__file__))
         self.image_path = os.path.join(script_dir, image_path)
-        self.raw_image = Image.open(image_path).convert("RGB")
+        self.raw_image = Image.open(self.image_path).convert("RGB")
 
     def get_enhanced_images(self):
         return self.enhanced_image_1, self.enhanced_image_2, self.enhanced_image_3
