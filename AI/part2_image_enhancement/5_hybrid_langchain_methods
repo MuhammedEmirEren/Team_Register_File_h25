@@ -61,7 +61,7 @@ def ai_enhanced_image_processing(image_path: str) -> str:
     # Step 2: Use AI to decide on enhancement strategy
     llm = ChatGoogleGenerativeAI(
         model="gemini-1.5-flash",
-        google_api_key="Enter API K",
+        google_api_key="Enter API Key",
         temperature=0.1,
     )
     

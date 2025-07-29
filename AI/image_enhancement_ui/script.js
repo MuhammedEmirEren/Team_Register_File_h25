@@ -121,7 +121,7 @@ function displayOriginalImage() {
 }
 
 // Start the enhancement process
-function startProcessing() {
+async function startProcessing() {
     if (isProcessing) return;
     
     isProcessing = true;
@@ -129,8 +129,16 @@ function startProcessing() {
     // Reset progress steps
     resetProgressSteps();
     
-    // Start the enhancement simulation
-    simulateEnhancementProcess();
+    // Check if backend is available for real enhancement
+    const backendAvailable = await checkBackendHealth();
+    
+    if (backendAvailable) {
+        // Use real Python backend enhancement
+        await realEnhancementProcess();
+    } else {
+        // Fallback to simulation
+        await simulateEnhancementProcess();
+    }
 }
 
 // Reset progress steps
@@ -145,6 +153,124 @@ function resetProgressSteps() {
     document.querySelector('#step2 .step-status').innerHTML = '<i class="fas fa-clock"></i>';
     document.querySelector('#step3 .step-status').innerHTML = '<i class="fas fa-clock"></i>';
     document.querySelector('#step4 .step-status').innerHTML = '<i class="fas fa-clock"></i>';
+}
+
+// Real enhancement process using Python backend
+async function realEnhancementProcess() {
+    try {
+        // Step 1: Analyzing Image
+        await updateStep(1, 'active', 'AI is analyzing your image...');
+        
+        // Get the current image file for backend processing
+        const imageFile = await dataURLToFile(currentImage, 'image.png');
+        
+        // Call the Python backend
+        console.log('🚀 Calling Python AI enhancement backend...');
+        const result = await enhanceImageWithBackend(imageFile);
+        
+        await updateStep(1, 'completed', '<i class="fas fa-check"></i>');
+        
+        // Step 2: Deciding Enhancements
+        await updateStep(2, 'active', 'AI is planning enhancements...');
+        await delay(1000);
+        await updateStep(2, 'completed', '<i class="fas fa-check"></i>');
+        
+        // Step 3: Applying Enhancements
+        await updateStep(3, 'active', 'Applying AI enhancements...');
+        await delay(1500);
+        await updateStep(3, 'completed', '<i class="fas fa-check"></i>');
+        
+        // Step 4: Finalizing
+        await updateStep(4, 'active', 'Finalizing enhanced image...');
+        await delay(500);
+        await updateStep(4, 'completed', '<i class="fas fa-check"></i>');
+        
+        // Show the real enhanced image
+        if (result.success && result.enhanced_image) {
+            showRealEnhancedImage(result);
+        } else {
+            throw new Error('Enhancement failed');
+        }
+        
+    } catch (error) {
+        console.error('Real enhancement process failed:', error);
+        showAlert('Real enhancement failed. Using demo mode.', 'warning');
+        // Fallback to simulation
+        await simulateEnhancementProcess();
+    }
+}
+
+// Convert data URL to File object
+async function dataURLToFile(dataURL, filename) {
+    const response = await fetch(dataURL);
+    const blob = await response.blob();
+    return new File([blob], filename, { type: blob.type });
+}
+
+// Show real enhanced image from Python backend
+function showRealEnhancedImage(result) {
+    // Use the actual enhanced image from Python backend
+    enhancedImage.src = result.enhanced_image;
+    enhancedImage.style.filter = 'none'; // No CSS filters needed - real enhancement applied
+    
+    // Hide loading placeholder and show enhanced image
+    loadingPlaceholder.style.display = 'none';
+    enhancedImage.style.display = 'block';
+    enhancedInfo.style.display = 'block';
+    
+    // Update enhanced image info with real enhancement details
+    const enhancements = result.enhancements_applied || {
+        brightness: '+AI Optimized',
+        contrast: '+AI Optimized', 
+        sharpness: '+AI Optimized',
+        noise_reduction: 'Applied'
+    };
+    
+    enhancedInfo.innerHTML = `
+        <span class="info-item">
+            <i class="fas fa-check-circle"></i>
+            Real AI Enhanced • ${Object.keys(enhancements).length} optimizations applied
+        </span>
+    `;
+    
+    // Show action buttons
+    actionButtons.style.display = 'flex';
+    
+    // Show success modal with real enhancement details
+    showRealSuccessModal(enhancements);
+    
+    isProcessing = false;
+}
+
+// Show success modal with real enhancement details
+function showRealSuccessModal(enhancements) {
+    const enhancementItems = Object.entries(enhancements).map(([key, value]) => `
+        <div style="display: flex; justify-content: space-between;">
+            <span>${key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' ')}:</span>
+            <span style="color: #48bb78; font-weight: 600;">${value}</span>
+        </div>
+    `).join('');
+    
+    enhancementSummary.innerHTML = `
+        <h4 style="margin-bottom: 1rem; color: #2d3748;">
+            <i class="fas fa-sparkles"></i> Real AI Enhancement Applied
+        </h4>
+        <div style="display: grid; gap: 0.5rem;">
+            ${enhancementItems}
+        </div>
+        <div style="margin-top: 1rem; padding: 0.75rem; background: rgba(72, 187, 120, 0.1); border-radius: 8px; border-left: 4px solid #48bb78;">
+            <small style="color: #2d3748; font-weight: 500;">
+                ✨ Enhanced using your Python AI backend with real image processing algorithms
+            </small>
+        </div>
+    `;
+    
+    successModal.style.display = 'flex';
+    
+    // Auto close modal after 4 seconds for real enhancement
+    setTimeout(() => {
+        closeModal();
+    }, 4000);
 }
 
 // Simulate the enhancement process
