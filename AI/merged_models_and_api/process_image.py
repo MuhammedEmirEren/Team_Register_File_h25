@@ -94,6 +94,7 @@ class process_image:
         new_size = (int(original_size[0] * scale), int(original_size[1] * scale))
 
         self.enhanced_image_1 = self.enhanced_image_1.resize(new_size, Image.Resampling.LANCZOS)
+        return self.enhanced_image_1
 
     def enhance_image_option2(self):
 
@@ -125,25 +126,9 @@ class process_image:
         # Get the image from result[1] - local file path, not a URL
         image_path = result[1]
 
-        # Copy the image to our desired l
-        import shutil
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        output_path = os.path.join(script_dir, "enhanced_image.png")
-        
-        try:
-            shutil.copy2(image_path, output_path)
-            print(f"Enhanced image saved as: {output_path}")
-        except Exception as e:
-            print(f"Error copying file: {e}")
-            try:
-                img = Image.open(image_path)
-                img.save(output_path)
-                print(f"Enhanced image saved as: {output_path}")
-            except Exception as e2:
-                print(f"Error saving with PIL: {e2}")
-
-        self.enhanced_image_2 = Image.open(output_path)     
-
+        self.enhanced_image_2 = Image.open(image_path)
+        return self.enhanced_image_2
+    
     def enhance_image_option3(self):
         enhancer = image_enhancement_option3_helper.image_enhancement_option3_helper(model=None)
         self.enhanced_image_3 = enhancer.ai_enhanced_image_processing(self.no_background_image)
@@ -175,9 +160,9 @@ class process_image:
             try:
                 return text
             except json.JSONDecodeError:
-                return {"raw_output": text}
+                return "Invalid JSON response: " + text
         except Exception as err:
-            return {"error": str(err)}
+            return "Error generating description: " + str(err)
     
 
     def choose_image(self, number: int):
