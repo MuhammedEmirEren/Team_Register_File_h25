@@ -80,7 +80,7 @@ function App() {
         {/* Selection Stage */}
         {showSelection && (
           <SelectionSection 
-            currentImage={currentImage}
+            currentImages={enhancedImages}
             onOptionSelect={handleOptionSelect}
           />
         )}

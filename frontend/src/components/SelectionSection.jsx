@@ -1,6 +1,6 @@
 import React from 'react';
 
-const SelectionSection = ({ currentImage, onOptionSelect }) => {
+const SelectionSection = ({ currentImages, onOptionSelect }) => {
   return (
     <section className="selection-section">
       <div className="selection-container">
@@ -14,7 +14,7 @@ const SelectionSection = ({ currentImage, onOptionSelect }) => {
             >
               <div className="option-label">Option {option}</div>
               <div className="option-image">
-                <img src={currentImage} alt={`Option ${option}`} />
+                <img src={currentImages[`option${option}`]} alt={`Option ${option}`} />
               </div>
               <div className="option-info">
                 <span>📏 1000 x 1004</span>
