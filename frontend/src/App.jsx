@@ -13,12 +13,14 @@ import FeaturesSection from './components/FeaturesSection';
 
 // Import custom hook
 import { useImageEnhancer } from './hooks/useImageEnhancer';
+import { useImageEnhancerWithAPI } from './hooks/useImageEnhancerWithAPI';
 
 function App() {
   const {
     // State
     currentImage,
     enhancedImageData,
+    enhancedImages,
     isProcessing,
     showProcessing,
     showSelection,
@@ -41,7 +43,7 @@ function App() {
     resetApplication,
     handleDownload,
     setSettings
-  } = useImageEnhancer();
+  } = useImageEnhancerWithAPI();
 
   return (
     <div className="container">

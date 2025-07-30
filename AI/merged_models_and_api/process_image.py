@@ -63,7 +63,16 @@ class process_image:
             xmin, ymin, xmax, ymax = map(int, box.tolist())
             self.cropped_image = self.raw_image.crop((xmin, ymin, xmax, ymax))
         
+        # If no objects were detected or cropped, use the entire original image
+        if self.cropped_image is None:
+            print("No objects detected with sufficient confidence. Using entire image.")
+            self.cropped_image = self.raw_image
+        
     def remove_background(self):
+        if self.cropped_image is None:
+            print("No cropped image available. Using entire image.")
+            self.cropped_image = self.raw_image
+
         self.no_background_image = remove(self.cropped_image)
 
     def enhance_image_option1(self):
@@ -186,8 +195,14 @@ class process_image:
         self.description = self.generate_description_from_image(img_b64, tone, lang)
 
     def process(self, image_path):
-        script_dir = os.path.dirname(os.path.abspath(__file__))
-        self.image_path = os.path.join(script_dir, image_path)
+        if os.path.isabs(image_path):
+            # If absolute path, use it directly
+            self.image_path = image_path
+        else:
+            # If relative path, join with script directory
+            script_dir = os.path.dirname(os.path.abspath(__file__))
+            self.image_path = os.path.join(script_dir, image_path)
+        
         self.raw_image = Image.open(self.image_path).convert("RGB")
 
     def get_enhanced_images(self):
