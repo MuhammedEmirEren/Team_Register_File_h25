@@ -6,10 +6,22 @@ function App() {
   const [enhancedImageData, setEnhancedImageData] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [showProcessing, setShowProcessing] = useState(false);
+  const [showSelection, setShowSelection] = useState(false);
+  const [showFinal, setShowFinal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [enhancementDetails, setEnhancementDetails] = useState({});
   const [isDragOver, setIsDragOver] = useState(false);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [generatedTitle, setGeneratedTitle] = useState('');
+  const [generatedDescription, setGeneratedDescription] = useState('');
+  
+  // Settings state
+  const [settings, setSettings] = useState({
+    background: 'white',
+    titleGeneration: true,
+    descriptionGeneration: true
+  });
   
   const fileInputRef = useRef(null);
 
@@ -57,15 +69,20 @@ function App() {
     const reader = new FileReader();
     reader.onload = function(e) {
       setCurrentImage(e.target.result);
-      setShowProcessing(true);
-      startProcessing();
+      setShowProcessing(false);
+      setShowSelection(false);
+      setShowFinal(false);
     };
     reader.readAsDataURL(file);
   };
 
-  const startProcessing = async () => {
-    if (isProcessing) return;
+  const handleEnhance = async () => {
+    if (!currentImage) {
+      showAlert('Please upload an image first', 'error');
+      return;
+    }
     
+    setShowProcessing(true);
     setIsProcessing(true);
     setCurrentStep(0);
     
@@ -91,8 +108,8 @@ function App() {
       setCurrentStep(4);
       await delay(1500);
       
-      // Show enhanced image (simulate enhancement)
-      showEnhancedImage();
+      // Show selection stage
+      showSelectionStage();
       
     } catch (error) {
       console.error('Enhancement process failed:', error);
@@ -101,16 +118,25 @@ function App() {
     }
   };
 
-  const showEnhancedImage = () => {
-    setEnhancedImageData(currentImage);
-    setEnhancementDetails({
-      brightness: '+10%',
-      contrast: '+20%',
-      sharpness: '+15%',
-      noise_reduction: 'Applied'
-    });
-    setShowSuccessModal(true);
+  const showSelectionStage = () => {
+    setShowProcessing(false);
+    setShowSelection(true);
     setIsProcessing(false);
+    
+    // Generate mock title and description if enabled
+    if (settings.titleGeneration) {
+      setGeneratedTitle('Premium Cotton T-Shirt - Comfortable and Stylish');
+    }
+    if (settings.descriptionGeneration) {
+      setGeneratedDescription('High-quality cotton t-shirt with excellent comfort and durability. Perfect for everyday wear with a modern fit and soft texture.');
+    }
+  };
+
+  const handleOptionSelect = (optionNumber) => {
+    setSelectedOption(optionNumber);
+    setEnhancedImageData(currentImage); // Using same image as placeholder
+    setShowFinal(true);
+    setShowSelection(false);
   };
 
   const resetApplication = () => {
@@ -118,10 +144,14 @@ function App() {
     setEnhancedImageData(null);
     setIsProcessing(false);
     setShowProcessing(false);
-    setShowSuccessModal(false);
+    setShowSelection(false);
+    setShowFinal(false);
     setCurrentStep(0);
     setEnhancementDetails({});
     setIsDragOver(false);
+    setSelectedOption(null);
+    setGeneratedTitle('');
+    setGeneratedDescription('');
     
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -230,6 +260,13 @@ function App() {
     return '⏱';
   };
 
+  const toggleSetting = (setting) => {
+    setSettings(prev => ({
+      ...prev,
+      [setting]: !prev[setting]
+    }));
+  };
+
   return (
     <div className="container">
       {/* Header */}
@@ -247,8 +284,8 @@ function App() {
 
       {/* Main Content */}
       <main className="main-content">
-        {/* Upload Section */}
-        {!showProcessing && (
+        {/* Upload Stage */}
+        {!currentImage && (
           <section className="upload-section">
             <div className="upload-container">
               <div 
@@ -280,52 +317,69 @@ function App() {
           </section>
         )}
 
-        {/* Processing Section */}
+        {/* Image and Settings Stage */}
+        {currentImage && !showProcessing && !showSelection && !showFinal && (
+          <section className="image-settings-section">
+            <div className="image-settings-container">
+              <div className="image-panel">
+                <h3>🖼️ Original Image</h3>
+                <div className="image-display">
+                  <img src={currentImage} alt="Original" />
+                </div>
+                <div className="image-info">
+                  <span>📏 Image loaded</span>
+                </div>
+              </div>
+              
+              <div className="settings-panel">
+                <h3>⚙️ Choose Settings</h3>
+                <div className="settings-options">
+                  <div className="setting-item">
+                    <label>Background: {settings.background === 'black' ? 'Black' : 'White'}</label>
+                    <div 
+                      className={`toggle ${settings.background === 'black' ? 'active' : ''}`}
+                      onClick={() => setSettings(prev => ({
+                        ...prev,
+                        background: prev.background === 'black' ? 'white' : 'black'
+                      }))}
+                    >
+                      <div className="toggle-slider"></div>
+                    </div>
+                  </div>
+                  
+                  <div className="setting-item">
+                    <label>Title Generation</label>
+                    <input 
+                      type="checkbox" 
+                      checked={settings.titleGeneration}
+                      onChange={() => toggleSetting('titleGeneration')}
+                    />
+                  </div>
+                  
+                  <div className="setting-item">
+                    <label>Description Generation</label>
+                    <input 
+                      type="checkbox" 
+                      checked={settings.descriptionGeneration}
+                      onChange={() => toggleSetting('descriptionGeneration')}
+                    />
+                  </div>
+                </div>
+                
+                <button className="enhance-btn" onClick={handleEnhance}>
+                  ✨ Enhance
+                </button>
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Processing Stage */}
         {showProcessing && (
           <section className="processing-section">
             <div className="processing-container">
-              <div className="image-preview">
-                <div className="preview-card original">
-                  <h4>🖼️ Original Image</h4>
-                  <div className="image-container">
-                    <img src={currentImage} alt="Original" />
-                  </div>
-                  <div className="image-info">
-                    <span className="info-item">
-                      📏 {currentImage && 'Image loaded'}
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="process-arrow">
-                  ✨
-                </div>
-                
-                <div className="preview-card enhanced">
-                  <h4>✨ Enhanced Image</h4>
-                  <div className="image-container">
-                    {enhancedImageData ? (
-                      <img src={enhancedImageData} alt="Enhanced" />
-                    ) : (
-                      <div className="loading-placeholder">
-                        <div className="spinner"></div>
-                        <p>AI is analyzing and enhancing your image...</p>
-                      </div>
-                    )}
-                  </div>
-                  <div className="image-info">
-                    {enhancedImageData && (
-                      <span className="info-item">
-                        ✅ Enhanced
-                      </span>
-                    )}
-                  </div>
-                </div>
-              </div>
-
-              {/* Enhancement Progress */}
               <div className="enhancement-progress">
-                <h4>✨ AI Enhancement Process</h4>
+                <h4>⚙️ AI Enhancement Process</h4>
                 <div className="progress-steps">
                   <div className={`step ${getStepStatus(1)}`}>
                     <div className="step-icon">
@@ -355,7 +409,7 @@ function App() {
                   
                   <div className={`step ${getStepStatus(3)}`}>
                     <div className="step-icon">
-                      ✨
+                      ⚡
                     </div>
                     <div className="step-content">
                       <h5>Applying Enhancements</h5>
@@ -368,11 +422,11 @@ function App() {
                   
                   <div className={`step ${getStepStatus(4)}`}>
                     <div className="step-icon">
-                      💾
+                      ✨
                     </div>
                     <div className="step-content">
-                      <h5>Ready for Download</h5>
-                      <p>Your enhanced image is ready!</p>
+                      <h5>Ready for Selection</h5>
+                      <p>Your enhanced options are ready!</p>
                     </div>
                     <div className="step-status">
                       {getStepIcon(4)}
@@ -380,24 +434,96 @@ function App() {
                   </div>
                 </div>
               </div>
+            </div>
+          </section>
+        )}
 
-              {/* Action Buttons */}
-              {enhancedImageData && (
-                <div className="action-buttons">
-                  <button className="btn btn-primary" onClick={downloadEnhancedImage}>
-                    💾 Download Enhanced Image
-                  </button>
-                  <button className="btn btn-secondary" onClick={resetApplication}>
-                    ➕ Enhance Another Image
-                  </button>
+        {/* Selection Stage */}
+        {showSelection && (
+          <section className="selection-section">
+            <div className="selection-container">
+              <h3>🎯 Choose Version</h3>
+              <div className="options-grid">
+                {[1, 2, 3].map((option) => (
+                  <div 
+                    key={option} 
+                    className="option-card"
+                    onClick={() => handleOptionSelect(option)}
+                  >
+                    <div className="option-label">Option {option}</div>
+                    <div className="option-image">
+                      <img src={currentImage} alt={`Option ${option}`} />
+                    </div>
+                    <div className="option-info">
+                      <span>📏 1000 x 1004</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
+        {/* Final Stage */}
+        {showFinal && (
+          <section className="final-section">
+            <div className="final-container">
+              <div className="comparison-panel">
+                <div className="original-panel">
+                  <h3>🖼️ Original Image</h3>
+                  <div className="image-display">
+                    <img src={currentImage} alt="Original" />
+                  </div>
+                  <div className="image-info">
+                    <span>📏 Original dimensions</span>
+                  </div>
                 </div>
-              )}
+                
+                <div className="enhanced-panel">
+                  <h3>✨ Enhanced Image</h3>
+                  <div className="image-display">
+                    <img src={enhancedImageData} alt="Enhanced" />
+                  </div>
+                  <div className="image-info">
+                    <span>📏 Enhanced dimensions</span>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="generation-panel">
+                {settings.titleGeneration && (
+                  <div className="generation-item">
+                    <h4>📝 Title etc.</h4>
+                    <div className="generation-content">
+                      {generatedTitle || 'Generating title...'}
+                    </div>
+                  </div>
+                )}
+                
+                {settings.descriptionGeneration && (
+                  <div className="generation-item">
+                    <h4>📄 Description etc.</h4>
+                    <div className="generation-content">
+                      {generatedDescription || 'Generating description...'}
+                    </div>
+                  </div>
+                )}
+              </div>
+              
+              <div className="final-actions">
+                <button className="btn btn-primary" onClick={downloadEnhancedImage}>
+                  💾 Download Enhanced Image
+                </button>
+                <button className="btn btn-secondary" onClick={resetApplication}>
+                  ➕ Enhance Another Image
+                </button>
+              </div>
             </div>
           </section>
         )}
 
         {/* How it Works Section */}
-        {!showProcessing && (
+        {!currentImage && (
           <section className="features-section">
             <div className="features-container">
               <h2>How Our AI System Works</h2>
@@ -422,8 +548,8 @@ function App() {
                   <div className="feature-icon">
                     ✨
                   </div>
-                  <h3>Intelligent Processing</h3>
-                  <p>Multiple enhancement techniques are applied simultaneously for the best possible result</p>
+                  <h3>Multiple Options</h3>
+                  <p>Get three different enhancement versions to choose the perfect one for your needs</p>
                 </div>
                 
                 <div className="feature-card">
@@ -446,8 +572,8 @@ function App() {
                   <div className="feature-icon">
                     🎯
                   </div>
-                  <h3>Sharpness Enhancement</h3>
-                  <p>Improves image clarity and detail definition for crisp, professional results</p>
+                  <h3>Smart Generation</h3>
+                  <p>Automatically generates titles and descriptions for your enhanced images</p>
                 </div>
               </div>
             </div>
@@ -465,36 +591,6 @@ function App() {
           </div>
         </div>
       </footer>
-
-      {/* Success Modal */}
-      {showSuccessModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h3>✅ Enhancement Complete!</h3>
-              <button className="modal-close" onClick={() => setShowSuccessModal(false)}>
-                ✕
-              </button>
-            </div>
-            <div className="modal-body">
-              <p>Your image has been successfully enhanced with AI-powered optimizations.</p>
-              <div className="enhancement-summary">
-                <h4 style={{marginBottom: '1rem', color: '#2d3748'}}>
-                  ✨ Enhancement Applied
-                </h4>
-                <div style={{display: 'grid', gap: '0.5rem'}}>
-                  {Object.entries(enhancementDetails).map(([key, value]) => (
-                    <div key={key} style={{display: 'flex', justifyContent: 'space-between'}}>
-                      <span>{key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' ')}:</span>
-                      <span style={{color: '#48bb78', fontWeight: '600'}}>{value}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
