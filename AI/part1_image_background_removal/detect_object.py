@@ -10,7 +10,7 @@ processor = OwlViTProcessor.from_pretrained("google/owlvit-base-patch32")
 model = OwlViTForObjectDetection.from_pretrained("google/owlvit-base-patch32")
 
 script_dir = os.path.dirname(os.path.abspath(__file__))
-image_path = os.path.join(script_dir, "Shoe.png")
+image_path = os.path.join(script_dir, "laptop.jpg")
 image = Image.open(image_path).convert("RGB")
 
 texts = [[

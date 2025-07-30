@@ -20,7 +20,7 @@ export const useImageEnhancerWithAPI = () => {
   const [generatedDescription, setGeneratedDescription] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadedImagePath, setUploadedImagePath] = useState(null);
-  
+
   // Settings state
   const [settings, setSettings] = useState({
     background: 'white',
@@ -168,6 +168,10 @@ export const useImageEnhancerWithAPI = () => {
             // If it's not JSON, use as plain text
             setGeneratedDescription(response.description);
           }
+        }
+        else
+        {
+          setGeneratedDescription('No description generated or it is not in the expected format.');
         }
       }
       

@@ -34,16 +34,82 @@ class process_image:
     def detect_object(self):
         processor = OwlViTProcessor.from_pretrained("google/owlvit-base-patch32")
         model = OwlViTForObjectDetection.from_pretrained("google/owlvit-base-patch32")
-        texts = [[ "clothing","topwear","bottomwear","outerwear","apparel","sportswear","uniform",
-                    "underwear", "dress", "outfit", "footwear", "shoes", "boots","sneakers",
-                    "accessory","bag","backpack","handbag","wallet","belt","hat","cap","scarf",
-                    "glasses","watch","jewel", "electronics", "device","gadget","smartphone","laptop"
-                    "tablet","headphones","smartwatch", "cosmetics","beauty product","skincare","makeup",
-                    "perfume","hair product", "baby product","baby clothes","toy","stroller","pacifier",
-                    "home item","furniture","appliance","decor","kitchenware","bedding","cleaning too",
-                    "sports gear","fitness equipment","gym accessory","camping gear","bicycle equipment"
+        texts = [[
+            # Giyim
+            "clothing",
+            "topwear",
+            "bottomwear",
+            "outerwear",
+            "apparel",
+            "sportswear",
+            "uniform",
+            "underwear",
+            "dress",
+            "outfit",
+
+            # Ayakkabı
+            "footwear",
+            "shoes",
+            "boots",
+            "sneakers",
+
+            # Aksesuarlar
+            "accessory",
+            "bag",
+            "backpack",
+            "handbag",
+            "wallet",
+            "belt",
+            "hat",
+            "cap",
+            "scarf",
+            "glasses",
+            "watch",
+            "jewelry",
+
+            # Elektronik
+            "electronics",
+            "device",
+            "gadget",
+            "smartphone",
+            "laptop",
+            "tablet",
+            "headphones",
+            "smartwatch",
+
+            # Kozmetik / Kişisel Bakım
+            "cosmetics",
+            "beauty product",
+            "skincare",
+            "makeup",
+            "perfume",
+            "hair product",
+
+            # Bebek ve çocuk
+            "baby product",
+            "baby clothes",
+            "toy",
+            "stroller",
+            "pacifier",
+
+            # Ev ve yaşam
+            "home item",
+            "furniture",
+            "appliance",
+            "decor",
+            "kitchenware",
+            "bedding",
+            "cleaning tool",
+
+            # Spor ve outdoor
+            "sports gear",
+            "fitness equipment",
+            "gym accessory",
+            "camping gear",
+            "bicycle equipment"
+            ]
         ]
-        ]
+
         inputs = processor(text=texts, images=self.raw_image, return_tensors="pt")
 
         with torch.no_grad():
@@ -145,7 +211,7 @@ class process_image:
     def generate_description_from_image(self, image_b64: str,
                                         tone: str = "professional",
                                         lang: str = "en") -> str:
-        API_KEY = "Enter API Key"
+        API_KEY = "AIzaSyBnD6vmTb1l500szFiWV_2HlRz0K72DtPw"
 
         genai.configure(api_key=API_KEY) # ← ONLY this line
 

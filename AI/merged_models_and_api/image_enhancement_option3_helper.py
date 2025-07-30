@@ -56,8 +56,8 @@ class image_enhancement_option3_helper:
             return None
         # Step 2: Use AI to decide on enhancement strategy
         llm = ChatGoogleGenerativeAI(
-            model="gemini-1.5-flash",
-            google_api_key="Enter API Key",
+            model="gemini-2.5-flash",
+            google_api_key="AIzaSyBnD6vmTb1l500szFiWV_2HlRz0K72DtPw",
             temperature=0.1,
         )
         
