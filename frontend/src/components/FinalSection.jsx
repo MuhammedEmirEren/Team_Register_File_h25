@@ -1,0 +1,70 @@
+import React from 'react';
+
+const FinalSection = ({ 
+  currentImage, 
+  enhancedImageData, 
+  settings, 
+  generatedTitle, 
+  generatedDescription, 
+  onDownload, 
+  onReset 
+}) => {
+  return (
+    <section className="final-section">
+      <div className="final-container">
+        <div className="comparison-panel">
+          <div className="original-panel">
+            <h3>🖼️ Original Image</h3>
+            <div className="image-display">
+              <img src={currentImage} alt="Original" />
+            </div>
+            <div className="image-info">
+              <span>📏 Original dimensions</span>
+            </div>
+          </div>
+          
+          <div className="enhanced-panel">
+            <h3>✨ Enhanced Image</h3>
+            <div className="image-display">
+              <img src={enhancedImageData} alt="Enhanced" />
+            </div>
+            <div className="image-info">
+              <span>📏 Enhanced dimensions</span>
+            </div>
+          </div>
+        </div>
+        
+        <div className="generation-panel">
+          {settings.titleGeneration && (
+            <div className="generation-item">
+              <h4>📝 Title etc.</h4>
+              <div className="generation-content">
+                {generatedTitle || 'Generating title...'}
+              </div>
+            </div>
+          )}
+          
+          {settings.descriptionGeneration && (
+            <div className="generation-item">
+              <h4>📄 Description etc.</h4>
+              <div className="generation-content">
+                {generatedDescription || 'Generating description...'}
+              </div>
+            </div>
+          )}
+        </div>
+        
+        <div className="final-actions">
+          <button className="btn btn-primary" onClick={onDownload}>
+            💾 Download Enhanced Image
+          </button>
+          <button className="btn btn-secondary" onClick={onReset}>
+            ➕ Enhance Another Image
+          </button>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default FinalSection; 
