@@ -17,7 +17,7 @@ src/
 │   ├── FeaturesSection.jsx     # "How it Works" section
 │   └── README.md              # This file
 ├── hooks/
-│   └── useImageEnhancer.js    # Custom hook for application logic
+│   └── useImageEnhancerWithAPI.js    # Custom hook for application logic
 ├── utils/
 │   └── helpers.js             # Utility functions
 ├── App.jsx                    # Main application component

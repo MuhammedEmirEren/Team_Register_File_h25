@@ -12,7 +12,6 @@ import FinalSection from './components/FinalSection';
 import FeaturesSection from './components/FeaturesSection';
 
 // Import custom hook
-import { useImageEnhancer } from './hooks/useImageEnhancer';
 import { useImageEnhancerWithAPI } from './hooks/useImageEnhancerWithAPI';
 
 function App() {
@@ -46,8 +45,30 @@ function App() {
   } = useImageEnhancerWithAPI();
 
   return (
-    <div className="container">
-      <Header />
+    <div className="app-wrapper">
+      {/* Corner decorations */}
+      <div className="corner-decoration top-left"></div>
+      <div className="corner-decoration top-right"></div>
+      <div className="corner-decoration bottom-left"></div>
+      <div className="corner-decoration bottom-right"></div>
+
+      {/* Side decorative elements */}
+      <div className="side-decoration left">
+        <div className="floating-shapes">
+          <div className="floating-shape"></div>
+          <div className="floating-shape"></div>
+          <div className="floating-shape"></div>
+        </div>
+      </div>
+      <div className="side-decoration right">
+        <div className="floating-shapes">
+          <div className="floating-shape"></div>
+          <div className="floating-shape"></div>
+        </div>
+      </div>
+
+      <div className="container">
+        <Header />
 
       <main className="main-content">
         {/* Upload Stage */}
@@ -105,6 +126,7 @@ function App() {
       </main>
 
       <Footer />
+      </div>
     </div>
   );
 }
