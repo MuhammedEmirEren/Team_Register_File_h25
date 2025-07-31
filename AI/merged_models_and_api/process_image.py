@@ -125,17 +125,44 @@ class process_image:
             threshold=0.2
         )[0]
         self.detected_objects = results["labels"].tolist()
+        
+        # Collect all valid bounding boxes
+        valid_boxes = []
+        detected_labels = []
         for score, label_id, box in zip(results["scores"], results["labels"], results["boxes"]):
             if score < 0.05:
                 continue 
-
-            xmin, ymin, xmax, ymax = map(int, box.tolist())
-            self.cropped_image = self.raw_image.crop((xmin, ymin, xmax, ymax))
+            valid_boxes.append(box.tolist())
+            detected_labels.append(texts[0][label_id])
         
-        # If no objects were detected or cropped, use the entire original image
-        if self.cropped_image is None:
-            print("No objects detected with sufficient confidence. Using entire image.")
+        if len(valid_boxes) == 0:
             self.cropped_image = self.raw_image
+        elif len(valid_boxes) == 1:
+            # Single object detected
+            xmin, ymin, xmax, ymax = map(int, valid_boxes[0])
+            self.cropped_image = self.raw_image.crop((xmin, ymin, xmax, ymax))
+            print(f"Single object detected: {detected_labels[0]}")
+        else:
+            # Multiple objects detected and they are pairs      
+            similar_items = ['shoes', 'boots', 'sneakers', 'footwear', 'glasses', 'earrings', 
+                           'gloves', 'socks', 'jewelry', 'watch', 'bracelet']
+            clothing_items = ['clothing', 'topwear', 'bottomwear', 'dress', 'outfit', 'apparel']
+            
+            has_similar_items = any(any(item in label.lower() for item in similar_items) 
+                                  for label in detected_labels)
+            has_clothing_items = any(any(item in label.lower() for item in clothing_items) 
+                                   for label in detected_labels)
+            
+            if has_similar_items or has_clothing_items or len(valid_boxes) <= 3:
+                # Combining them
+                all_xmin = min(box[0] for box in valid_boxes)
+                all_ymin = min(box[1] for box in valid_boxes)
+                all_xmax = max(box[2] for box in valid_boxes)
+                all_ymax = max(box[3] for box in valid_boxes)
+            
+                self.cropped_image = self.raw_image.crop((all_xmin, all_ymin, all_xmax, all_ymax))
+            else: # If there are too many different objects
+                self.cropped_image = self.raw_image
         
     def remove_background(self):
         if self.cropped_image is None:
@@ -308,7 +335,6 @@ class process_image:
             return self.description
 
     def process(self, image_path):
-        self.image_path = image_path
         if os.path.isabs(image_path):
             # If absolute path, use it directly
             self.image_path = image_path
