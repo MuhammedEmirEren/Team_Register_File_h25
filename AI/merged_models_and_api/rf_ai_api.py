@@ -111,18 +111,18 @@ async def enhance_image(request: ImageEnhancementRequest):
         print("Step 4: Enhancement option 1...")
         try:
             img_processor.enhance_image_option1()
-            print("✓ Enhancement option 1 completed")
+            print("Enhancement option 1 completed")
         except Exception as e:
-            print(f"❌ Enhancement option 1 failed: {str(e)}")
+            print(f"Enhancement option 1 failed: {str(e)}")
             # Set a placeholder or skip this enhancement
             img_processor.enhanced_image_1 = img_processor.no_background_image
         
         print("Step 5: Enhancement option 2...")
         try:
             img_processor.enhance_image_option2()
-            print("✓ Enhancement option 2 completed")
+            print("Enhancement option 2 completed")
         except Exception as e:
-            print(f"❌ Enhancement option 2 failed: {str(e)}")
+            print(f"Enhancement option 2 failed: {str(e)}")
             # Set a placeholder or skip this enhancement
             img_processor.enhanced_image_2 = img_processor.no_background_image
         
@@ -131,7 +131,7 @@ async def enhance_image(request: ImageEnhancementRequest):
             img_processor.enhance_image_option3()
             print("✓ Enhancement option 3 completed")
         except Exception as e:
-            print(f"❌ Enhancement option 3 failed: {str(e)}")
+            print(f"Enhancement option 3 failed: {str(e)}")
             # Set a placeholder or skip this enhancement
             img_processor.enhanced_image_3 = img_processor.no_background_image
         

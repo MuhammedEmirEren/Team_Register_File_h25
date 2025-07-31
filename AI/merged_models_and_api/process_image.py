@@ -17,6 +17,9 @@ import google.generativeai as genai
 import base64
 from langchain_google_genai import ChatGoogleGenerativeAI
 import image_enhancement_option3_helper
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class process_image:
     def __init__(self):
@@ -211,17 +214,19 @@ class process_image:
     def generate_description_from_image(self, image_b64: str,
                                         tone: str = "professional",
                                         lang: str = "en") -> str:
-        API_KEY = "AIzaSyBnD6vmTb1l500szFiWV_2HlRz0K72DtPw"
+        
+        API_KEY = os.getenv("SECRET_API_KEY")
 
         genai.configure(api_key=API_KEY) # ← ONLY this line
 
-        model = genai.GenerativeModel("models/gemini-2.5-pro")
+        model = genai.GenerativeModel("gemini-2.0-flash-exp")  # Updated model name
 
         prompt = (
-            f"Generate an SEO-optimised e-commerce product listing in {lang}. "
-            f"Tone: {tone}. Respond ONLY with strict JSON containing keys "
-            f"{{'title','description','features','tags'}}. "
-            f"'features' and 'tags' must be arrays."
+            f"Analyze this product image and generate an SEO-optimized e-commerce product listing in {lang}. "
+            f"Tone: {tone}. Respond ONLY with valid JSON (no markdown formatting) containing these exact keys: "
+            f"'title', 'description', 'features', 'tags'. "
+            f"The 'features' and 'tags' must be arrays of strings. "
+            f"Do not include any other text or formatting."
         )
 
         try:
@@ -232,7 +237,21 @@ class process_image:
                 ]
             )
             text = response.text.strip()
+            
+            # Remove markdown code blocks
+            if text.startswith("```json"):
+                text = text[7:]  # Remove ```json
+            if text.startswith("```"):
+                text = text[3:]   # Remove ```
+            if text.endswith("```"):
+                text = text[:-3]  # Remove trailing ```
+            
+            text = text.strip()
+            
+            # Parsing the JSON response
             try:
+                parsed_json = json.loads(text)
+                print("Successfully parsed JSON response")
                 return text
             except json.JSONDecodeError:
                 return "Invalid JSON response: " + text
@@ -252,13 +271,41 @@ class process_image:
         
 
     def generate_description(self):
-        from io import BytesIO
-        buffer = BytesIO()
-        self.chosen_image.save(buffer, format='JPEG')
-        img_b64 = base64.b64encode(buffer.getvalue()).decode()
-        tone = "professional"
-        lang = "en"
-        self.description = self.generate_description_from_image(img_b64, tone, lang)
+        print("Starting description generation...")
+        
+        if self.chosen_image is None:
+            print("Error: No image chosen for description generation")
+            self.description = "Error: No image selected for description generation"
+            return self.description
+        
+        try:
+            print("Converting image to base64...")
+            from io import BytesIO
+            buffer = BytesIO()  
+            
+            # It handles RGBA images by converting to RGB
+            image_to_save = self.chosen_image
+            if image_to_save.mode == 'RGBA':
+                background = Image.new('RGB', image_to_save.size, (255, 255, 255))
+                background.paste(image_to_save, mask=image_to_save.split()[-1])  # Use alpha channel as mask
+                image_to_save = background
+            elif image_to_save.mode != 'RGB':
+                image_to_save = image_to_save.convert('RGB')
+            
+            image_to_save.save(buffer, format='JPEG', quality=95)
+            img_b64 = base64.b64encode(buffer.getvalue()).decode()
+            print(f"Image converted to base64, size: {len(img_b64)} characters")
+            
+            tone = "professional"
+            lang = "en"
+            self.description = self.generate_description_from_image(img_b64, tone, lang)
+            return self.description
+        except Exception as e:
+            print(f"Error in generate_description: {str(e)}")
+            import traceback
+            traceback.print_exc()
+            self.description = f"Error generating description: {str(e)}"
+            return self.description
 
     def process(self, image_path):
         if os.path.isabs(image_path):

@@ -159,7 +159,7 @@ export const useImageEnhancerWithAPI = () => {
         const response = await apiService.chooseImageAndGenerateDescription(optionNumber);
         
         // Parse the description response
-        if (response.description && typeof response.description === 'string') {
+        if (response.description) {
           try {
             const descriptionData = JSON.parse(response.description);
             if (descriptionData.title) setGeneratedTitle(descriptionData.title);

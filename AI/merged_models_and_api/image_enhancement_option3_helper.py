@@ -2,6 +2,9 @@ import os
 import uuid
 from PIL import Image, ImageEnhance, ImageFilter
 from langchain_google_genai import ChatGoogleGenerativeAI
+from dotenv import load_dotenv
+
+load_dotenv()
 
 class image_enhancement_option3_helper:
     def __init__(self, model):
@@ -54,10 +57,12 @@ class image_enhancement_option3_helper:
         analysis = self.analyze_image(image)
         if not analysis:
             return None
-        # Step 2: Use AI to decide on enhancement strategy
+        
+        
+        # Step 2: Using Google Generative AI to decide on enhancements
         llm = ChatGoogleGenerativeAI(
             model="gemini-2.5-flash",
-            google_api_key="AIzaSyBnD6vmTb1l500szFiWV_2HlRz0K72DtPw",
+            google_api_key=os.getenv("SECRET_API_KEY"),
             temperature=0.1,
         )
         
