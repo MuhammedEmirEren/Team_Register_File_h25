@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 
 const FinalSection = ({ 
   currentImage, 
@@ -9,6 +9,36 @@ const FinalSection = ({
   onDownload, 
   onReset 
 }) => {
+  const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
+  const [enhancedDimensions, setEnhancedDimensions] = useState({ width: 0, height: 0 });
+
+  // Helper function to get image dimensions
+  const getImageDimensions = (base64Data) => {
+    return new Promise((resolve) => {
+      const img = new Image();
+      img.onload = () => {
+        resolve({ width: img.width, height: img.height });
+      };
+      img.onerror = () => {
+        resolve({ width: 0, height: 0 });
+      };
+      img.src = base64Data;
+    });
+  };
+
+  // Get dimensions when images change
+  useEffect(() => {
+    if (currentImage) {
+      getImageDimensions(currentImage).then(setOriginalDimensions);
+    }
+  }, [currentImage]);
+
+  useEffect(() => {
+    if (enhancedImageData) {
+      getImageDimensions(enhancedImageData).then(setEnhancedDimensions);
+    }
+  }, [enhancedImageData]);
+
   return (
     <section className="final-section">
       <div className="final-container">
@@ -19,7 +49,7 @@ const FinalSection = ({
               <img src={currentImage} alt="Original" />
             </div>
             <div className="image-info">
-              <span>📏 Original dimensions</span>
+              <span>📏 {originalDimensions.width} x {originalDimensions.height}</span>
             </div>
           </div>
           
@@ -29,7 +59,7 @@ const FinalSection = ({
               <img src={enhancedImageData} alt="Enhanced" />
             </div>
             <div className="image-info">
-              <span>📏 Enhanced dimensions</span>
+              <span>📏 {enhancedDimensions.width} x {enhancedDimensions.height}</span>
             </div>
           </div>
         </div>
