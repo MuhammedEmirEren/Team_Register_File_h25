@@ -169,8 +169,8 @@ export const useImageEnhancerWithAPI = () => {
       setSelectedOption(optionNumber);
       
       // Get the selected enhanced image
-      const selectedImage = enhancedImages[`option${optionNumber}`];
-      setEnhancedImageData(selectedImage);
+      const selectedImageData = enhancedImages[`option${optionNumber}`];
+      setEnhancedImageData(selectedImageData.image);
 
       if(settings.descriptionGeneration || settings.titleGeneration) {
     // Generate description if enabled
