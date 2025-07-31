@@ -169,18 +169,19 @@ export const useImageEnhancerWithAPI = () => {
       setSelectedOption(optionNumber);
       
       // Get the selected enhanced image
-      const selectedImageData = enhancedImages[`option${optionNumber}`];
-      setEnhancedImageData(selectedImageData.image);
-      
-      // Generate description if enabled
-      if (settings.descriptionGeneration) {
+      const selectedImage = enhancedImages[`option${optionNumber}`];
+      setEnhancedImageData(selectedImage);
+
+      if(settings.descriptionGeneration || settings.titleGeneration) {
+    // Generate description if enabled
         showAlert('Generating description...', 'info');
         const response = await apiService.chooseImageAndGenerateDescription(optionNumber);
-        
+        console.log('Response from API:', response);
         // Parse the description response
         if (response.description) {
           try {
             const descriptionData = JSON.parse(response.description);
+            console.log('Parsed description data:', descriptionData);
             if (descriptionData.title) setGeneratedTitle(descriptionData.title);
             if (descriptionData.description) setGeneratedDescription(descriptionData.description);
           } catch (e) {
@@ -192,12 +193,17 @@ export const useImageEnhancerWithAPI = () => {
         {
           setGeneratedDescription('No description generated or it is not in the expected format.');
         }
+        
+        console.log('Generated Title:', generatedTitle);
+        console.log('Generated Description:', generatedDescription);
+        // Set a default title if not generated
+        /*
+        if (settings.titleGeneration && !generatedTitle) {
+          setGeneratedTitle('Enhanced Product Image');
+        }*/
       }
       
-      // Set a default title if not generated
-      if (settings.titleGeneration && !generatedTitle) {
-        setGeneratedTitle('Enhanced Product Image');
-      }
+      
       
       setShowFinal(true);
       setShowSelection(false);

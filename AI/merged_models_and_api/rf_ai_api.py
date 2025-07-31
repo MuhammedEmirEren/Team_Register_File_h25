@@ -102,11 +102,18 @@ async def enhance_image(request: ImageEnhancementRequest):
         print("Step 1: Processing image...")
         img_processor.process(image_path_to_use)
         
+        img_processor.raw_image.save("processed_image.png")  # Save processed image for debugging
+        
         print("Step 2: Detecting objects...")
         img_processor.detect_object()
         
+        img_processor.cropped_image.save("detected_objects_image.png")  # Save detected objects image for debugging
+        print(img_processor.detected_objects)
+        
         print("Step 3: Removing background...")
         img_processor.remove_background()
+        
+        img_processor.no_background_image.save("no_background_image.png")  # Save no background image for debugging
         
         print("Step 4: Enhancement option 1...")
         try:
@@ -184,7 +191,7 @@ async def choose_image_and_generate_description(
         }
     
     except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Error generating description: {str(e)}")
+        raise HTTPException(status_code=500, detail=f"Error generating description: {str(e)}") 
 
 @app.delete("/cleanup/{processor_id}")
 async def cleanup_processor(processor_id: str):

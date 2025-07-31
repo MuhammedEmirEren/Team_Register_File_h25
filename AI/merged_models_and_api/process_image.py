@@ -308,6 +308,7 @@ class process_image:
             return self.description
 
     def process(self, image_path):
+        self.image_path = image_path
         if os.path.isabs(image_path):
             # If absolute path, use it directly
             self.image_path = image_path
