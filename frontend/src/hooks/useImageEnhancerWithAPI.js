@@ -2,13 +2,27 @@ import { useState, useRef } from 'react';
 import { showAlert, delay, validateFile, downloadImage } from '../utils/helpers';
 import apiService from '../services/apiService';
 
+// Helper function to get image dimensions from base64 data
+const getImageDimensions = (base64Data) => {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => {
+      resolve({ width: img.width, height: img.height });
+    };
+    img.onerror = () => {
+      resolve({ width: 0, height: 0 });
+    };
+    img.src = base64Data;
+  });
+};
+
 export const useImageEnhancerWithAPI = () => {
   const [currentImage, setCurrentImage] = useState(null);
   const [enhancedImageData, setEnhancedImageData] = useState(null);
   const [enhancedImages, setEnhancedImages] = useState({
-    option1: null,
-    option2: null,
-    option3: null
+    option1: { image: null, dimensions: { width: 0, height: 0 } },
+    option2: { image: null, dimensions: { width: 0, height: 0 } },
+    option3: { image: null, dimensions: { width: 0, height: 0 } }
   });
   const [isProcessing, setIsProcessing] = useState(false);
   const [showProcessing, setShowProcessing] = useState(false);
@@ -119,11 +133,16 @@ export const useImageEnhancerWithAPI = () => {
       // Call your actual API
       const response = await apiService.enhanceImage(uploadedImagePath);
       
-      // Store the enhanced images
+      // Get dimensions for each enhanced image
+      const dimensions1 = await getImageDimensions(response.enhanced_image_1);
+      const dimensions2 = await getImageDimensions(response.enhanced_image_2);
+      const dimensions3 = await getImageDimensions(response.enhanced_image_3);
+      
+      // Store the enhanced images with their dimensions
       setEnhancedImages({
-        option1: response.enhanced_image_1,
-        option2: response.enhanced_image_2,
-        option3: response.enhanced_image_3
+        option1: { image: response.enhanced_image_1, dimensions: dimensions1 },
+        option2: { image: response.enhanced_image_2, dimensions: dimensions2 },
+        option3: { image: response.enhanced_image_3, dimensions: dimensions3 }
       });
       
       // Step 4: Finalizing
@@ -150,8 +169,8 @@ export const useImageEnhancerWithAPI = () => {
       setSelectedOption(optionNumber);
       
       // Get the selected enhanced image
-      const selectedImage = enhancedImages[`option${optionNumber}`];
-      setEnhancedImageData(selectedImage);
+      const selectedImageData = enhancedImages[`option${optionNumber}`];
+      setEnhancedImageData(selectedImageData.image);
       
       // Generate description if enabled
       if (settings.descriptionGeneration) {

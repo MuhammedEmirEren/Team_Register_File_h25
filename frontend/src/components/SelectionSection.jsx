@@ -11,7 +11,7 @@ const SelectionSection = ({ currentImages, onOptionSelect }) => {
   const handleOptionClick = (optionNumber) => {
     setPreviewModal({
       isOpen: true,
-      selectedImage: currentImages[`option${optionNumber}`],
+      selectedImage: currentImages[`option${optionNumber}`].image,
       optionNumber: optionNumber
     });
   };
@@ -39,22 +39,27 @@ const SelectionSection = ({ currentImages, onOptionSelect }) => {
         <h3>🎯 Choose Version</h3>
         <p className="selection-instruction">Click on any option to preview it in full size</p>
         <div className="options-grid">
-          {[1, 2, 3].map((option) => (
-            <div 
-              key={option} 
-              className="option-card"
-              onClick={() => handleOptionClick(option)}
-            >
-              <div className="option-label">Option {option}</div>
-              <div className="option-image">
-                <img src={currentImages[`option${option}`]} alt={`Option ${option}`} />
+          {[1, 2, 3].map((option) => {
+            const imageData = currentImages[`option${option}`];
+            const { width, height } = imageData.dimensions;
+            
+            return (
+              <div 
+                key={option} 
+                className="option-card"
+                onClick={() => handleOptionClick(option)}
+              >
+                <div className="option-label">Option {option}</div>
+                <div className="option-image">
+                  <img src={imageData.image} alt={`Option ${option}`} />
+                </div>
+                <div className="option-info">
+                  <span>📏 {width} x {height}</span>
+                  <span className="preview-hint">Click to preview</span>
+                </div>
               </div>
-              <div className="option-info">
-                <span>📏 1000 x 1004</span>
-                <span className="preview-hint">Click to preview</span>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
