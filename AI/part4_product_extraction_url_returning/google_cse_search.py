@@ -10,7 +10,7 @@ def search_products_google_cse(query, num_results=1):
     url = "https://www.googleapis.com/customsearch/v1"
     
     params = {
-        'key': "AIzaSyBQJacoPVr3LZaxiB6eOt4KSMa-1DfCrbA",
+        'key': "YOUR_API_KEY_HERE",
         'cx': "068bf089d39b74b14",
         'q': query,
         'num': min(num_results, 10),

@@ -5,9 +5,11 @@ const FinalSection = ({
   enhancedImageData, 
   settings, 
   generatedTitle, 
-  generatedDescription, 
+  generatedDescription,
+  searchUrl,
   onDownload, 
-  onReset 
+  onReset,
+  onSearchProduct
 }) => {
   const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
   const [enhancedDimensions, setEnhancedDimensions] = useState({ width: 0, height: 0 });
@@ -49,6 +51,35 @@ const FinalSection = ({
   const closeModal = () => {
     setModalImage(null);
     setModalTitle('');
+  };
+
+  const handleSearchProduct = async () => {
+    if (!generatedTitle && !generatedDescription) {
+      alert('No product information available to search');
+      return;
+    }
+    
+    // Use the title if available, otherwise use part of the description
+    const searchQuery = generatedTitle
+    console.log('Search query:', searchQuery);
+    
+    if (onSearchProduct) {
+      try {
+        console.log('Calling search function...');
+        await onSearchProduct(searchQuery);
+        console.log('Search function completed, got URL:', searchUrl);
+
+        // Immediately open the URL in a new tab
+        if (searchUrl) {
+          window.open(searchUrl, '_blank', 'noopener,noreferrer');
+        } else {
+          alert('No search results found. Please try again.');
+        }
+      } catch (error) {
+        console.error('Error in search:', error);
+        alert('Error searching for products. Please try again.');
+      }
+    }
   };
 
   return (
@@ -100,6 +131,11 @@ const FinalSection = ({
           <button className="btn btn-primary" onClick={onDownload}>
             💾 Download Enhanced Image
           </button>
+          
+          <button className="btn btn-secondary" onClick={handleSearchProduct}>
+            🔍 Search & View Similar Products
+          </button>
+          
           <button className="btn btn-secondary" onClick={onReset}>
             ➕ Enhance Another Image
           </button>

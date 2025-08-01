@@ -28,6 +28,7 @@ function App() {
     selectedOption,
     generatedTitle,
     generatedDescription,
+    searchUrl,
     isDragOver,
     settings,
     fileInputRef,
@@ -41,6 +42,7 @@ function App() {
     handleOptionSelect,
     resetApplication,
     handleDownload,
+    getSearchUrl,
     setSettings
   } = useImageEnhancerWithAPI();
 
@@ -114,8 +116,10 @@ function App() {
             settings={settings}
             generatedTitle={generatedTitle}
             generatedDescription={generatedDescription}
+            searchUrl={searchUrl}
             onDownload={handleDownload}
             onReset={resetApplication}
+            onSearchProduct={getSearchUrl}
           />
         )}
 

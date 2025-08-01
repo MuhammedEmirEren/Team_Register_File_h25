@@ -32,6 +32,7 @@ export const useImageEnhancerWithAPI = () => {
   const [selectedOption, setSelectedOption] = useState(null);
   const [generatedTitle, setGeneratedTitle] = useState('');
   const [generatedDescription, setGeneratedDescription] = useState('');
+  const [searchUrl, setSearchUrl] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadedImagePath, setUploadedImagePath] = useState(null);
 
@@ -247,6 +248,19 @@ export const useImageEnhancerWithAPI = () => {
     downloadImage(enhancedImageData);
   };
 
+  const getSearchUrl = async (query) => {
+    try {
+      console.log('Searching for:', query);
+      const url = await apiService.searchProduct(query);
+      console.log('API returned URL:', url);
+      setSearchUrl(url);
+      console.log('Search URL state updated to:', url);
+    } catch (error) {
+      console.error('Error searching product:', error);
+      showAlert('Error searching product. Please try again.', 'error');
+    }
+  };
+
   return {
     // State
     currentImage,
@@ -260,6 +274,7 @@ export const useImageEnhancerWithAPI = () => {
     selectedOption,
     generatedTitle,
     generatedDescription,
+    searchUrl,
     isDragOver,
     settings,
     fileInputRef,
@@ -273,6 +288,7 @@ export const useImageEnhancerWithAPI = () => {
     handleOptionSelect,
     resetApplication,
     handleDownload,
+    getSearchUrl,
     setSettings
   };
 };

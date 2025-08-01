@@ -9,6 +9,7 @@ import base64
 from io import BytesIO
 from PIL import Image
 import uuid
+from search_product import search_product
 
 app = FastAPI()
 
@@ -30,6 +31,10 @@ class ImageEnhancementRequest(BaseModel):
 class ImageSelectionRequest(BaseModel):
     image_path: str
     option_number: int
+
+class SearchRequest(BaseModel):
+    query: str
+    num_results: Optional[int] = 1
 
 def pil_image_to_base64(pil_image):
     """Convert PIL Image to base64 string for JSON serialization"""
@@ -206,6 +211,30 @@ async def cleanup_processor(processor_id: str):
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "active_processors": len(processors)}
+
+@app.post("/get_search_results")
+async def get_search_results(request: SearchRequest):
+    """Get search results for a query"""
+    try:
+        print(f"Searching for: {request.query}")
+        searcher = search_product()
+        results = searcher.search_products_google_cse(request.query, request.num_results)
+        
+        print(f"Found {len(results)} results")
+        for i, result in enumerate(results):
+            print(f"Result {i+1}: {result.get('title', 'No title')}")
+            print(f"URL: {result.get('link', 'No URL')}")
+        
+        return {
+            "results": results, 
+            "query": request.query,
+            "count": len(results)
+        }
+    except Exception as e:
+        print(f"Error in search: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error searching: {str(e)}")
 
 if __name__ == "__main__":
     import uvicorn

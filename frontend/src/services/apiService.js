@@ -111,6 +111,35 @@ class ApiService {
       throw error;
     }
   }
+
+  async searchProduct(query) {
+    try {
+
+      const response = await fetch(`${this.baseURL}/get_search_results?query=${encodeURIComponent(query)}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      // Access the link inside the results object
+      if (data.results && data.results[0].link) {
+        return data.results[0].link;
+      }
+      
+      console.warn('Could not find results.link field in response');
+      return null;
+    } catch (error) {
+      console.error('Error searching product:', error);
+      throw error;
+    }
+  }
 }
 
 export default new ApiService();
