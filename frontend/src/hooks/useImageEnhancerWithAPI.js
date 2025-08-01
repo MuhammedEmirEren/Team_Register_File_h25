@@ -251,10 +251,10 @@ export const useImageEnhancerWithAPI = () => {
   const getSearchUrl = async (query) => {
     try {
       console.log('Searching for:', query);
-      const url = await apiService.searchProduct(query);
-      console.log('API returned URL:', url);
-      setSearchUrl(url);
-      console.log('Search URL state updated to:', url);
+      await apiService.searchProduct(query);
+      console.log('API returned URL:', searchUrl);
+      setSearchUrl(searchUrl);
+      console.log('Search URL state updated to:', searchUrl);
     } catch (error) {
       console.error('Error searching product:', error);
       showAlert('Error searching product. Please try again.', 'error');

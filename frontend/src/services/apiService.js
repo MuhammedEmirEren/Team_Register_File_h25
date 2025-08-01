@@ -115,11 +115,12 @@ class ApiService {
   async searchProduct(query) {
     try {
 
-      const response = await fetch(`${this.baseURL}/get_search_results?query=${encodeURIComponent(query)}`, {
+      const response = await fetch(`${this.baseURL}/get_search_results`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ query })
       });
 
       
