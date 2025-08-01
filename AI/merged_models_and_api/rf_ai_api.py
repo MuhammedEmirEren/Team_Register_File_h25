@@ -27,6 +27,7 @@ processors = {}
 
 class ImageEnhancementRequest(BaseModel):
     image_path: str
+    background: str = 'white'  # Default background color
 
 class ImageSelectionRequest(BaseModel):
     image_path: str
@@ -47,6 +48,16 @@ def pil_image_to_base64(pil_image):
     pil_image.save(buffer, format='JPEG', quality=95)
     img_str = base64.b64encode(buffer.getvalue()).decode()
     return f"data:image/jpeg;base64,{img_str}"
+
+def apply_background(image: Image.Image, background: str = 'white') -> Image.Image:
+    """Apply a solid background (white or black) to an RGBA image"""
+    if image.mode != 'RGBA':
+        image = image.convert("RGBA")
+
+    bg_color = (255, 255, 255) if background.lower() == 'white' else (0, 0, 0)
+    background_image = Image.new("RGB", image.size, bg_color)
+    background_image.paste(image, mask=image.split()[3])  # Use alpha channel as mask
+    return background_image
 
 @app.post("/upload")
 async def upload_image(image: UploadFile = File(...)):
@@ -81,7 +92,8 @@ async def enhance_image(request: ImageEnhancementRequest):
     """Process image through all enhancement options"""
     try:
         print(f"Starting enhancement for image: {request.image_path}")
-        
+        background_color = request.background
+        print(f"Using background color: {background_color}")
         # Create a new processor instance
         processor_id = str(uuid.uuid4())
         img_processor = process_image()
@@ -117,6 +129,8 @@ async def enhance_image(request: ImageEnhancementRequest):
         
         print("Step 3: Removing background...")
         img_processor.remove_background()
+        
+        img_processor.no_background_image = apply_background(img_processor.no_background_image, background_color)
         
         img_processor.no_background_image.save("no_background_image.png")  # Save no background image for debugging
         

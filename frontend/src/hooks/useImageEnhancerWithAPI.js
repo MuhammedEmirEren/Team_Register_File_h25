@@ -132,7 +132,7 @@ export const useImageEnhancerWithAPI = () => {
       setCurrentStep(3);
       
       // Call your actual API
-      const response = await apiService.enhanceImage(uploadedImagePath);
+      const response = await apiService.enhanceImage(uploadedImagePath, settings.background);
       
       // Get dimensions for each enhanced image
       const dimensions1 = await getImageDimensions(response.enhanced_image_1);

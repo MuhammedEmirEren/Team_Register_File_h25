@@ -29,7 +29,7 @@ class ApiService {
     }
   }
 
-  async enhanceImage(imagePath) {
+  async enhanceImage(imagePath, background = 'white') {
     try {
       const response = await fetch(`${this.baseURL}/enhance_and_return_all_options`, {
         method: 'POST',
@@ -38,6 +38,7 @@ class ApiService {
         },
         body: JSON.stringify({
           image_path: imagePath,
+          background: background
         }),
       });
 
