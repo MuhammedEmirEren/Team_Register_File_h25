@@ -115,16 +115,11 @@ class ApiService {
 
   async searchProduct(query) {
     try {
-
-      const response = await fetch(`${this.baseURL}/get_search_results`, {
+      const response = await fetch(`${this.baseURL}/get_search_results?query=${encodeURIComponent(query)}`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ query })
       });
 
-      
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -132,7 +127,9 @@ class ApiService {
       const data = await response.json();
       // Access the link inside the results object
       if (data.results && data.results[0].link) {
+        console.log('Inside the if statement, data.results[0].link:');
         return data.results[0].link;
+        
       }
       
       console.warn('Could not find results.link field in response');

@@ -33,10 +33,6 @@ class ImageSelectionRequest(BaseModel):
     image_path: str
     option_number: int
 
-class SearchRequest(BaseModel):
-    query: str
-    num_results: Optional[int] = 1
-
 def pil_image_to_base64(pil_image):
     """Convert PIL Image to base64 string for JSON serialization"""
     if pil_image is None:
@@ -227,12 +223,12 @@ async def health_check():
     return {"status": "healthy", "active_processors": len(processors)}
 
 @app.post("/get_search_results")
-async def get_search_results(request: SearchRequest):
+async def get_search_results(query:str):
     """Get search results for a query"""
     try:
-        print(f"Searching for: {request.query}")
+        print(f"Searching for: {query}")
         searcher = search_product()
-        results = searcher.search_products_google_cse(request.query, request.num_results)
+        results = searcher.search_products_google_cse(query, 5)
         
         print(f"Found {len(results)} results")
         for i, result in enumerate(results):
@@ -241,8 +237,6 @@ async def get_search_results(request: SearchRequest):
         
         return {
             "results": results, 
-            "query": request.query,
-            "count": len(results)
         }
     except Exception as e:
         print(f"Error in search: {str(e)}")

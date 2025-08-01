@@ -83,6 +83,7 @@ export const useImageEnhancerWithAPI = () => {
         setShowProcessing(false);
         setShowSelection(false);
         setShowFinal(false);
+        setSearchUrl('');
       };
       reader.readAsDataURL(file);
 
@@ -107,6 +108,7 @@ export const useImageEnhancerWithAPI = () => {
     setShowProcessing(true);
     setIsProcessing(true);
     setCurrentStep(0);
+    setSearchUrl('');
     
     try {
       await enhanceImageWithAPI();
@@ -232,6 +234,7 @@ export const useImageEnhancerWithAPI = () => {
     setSelectedOption(null);
     setGeneratedTitle('');
     setGeneratedDescription('');
+    setSearchUrl('');
     setUploadedImagePath(null);
     
     if (fileInputRef.current) {
@@ -251,10 +254,11 @@ export const useImageEnhancerWithAPI = () => {
   const getSearchUrl = async (query) => {
     try {
       console.log('Searching for:', query);
-      await apiService.searchProduct(query);
-      console.log('API returned URL:', searchUrl);
-      setSearchUrl(searchUrl);
-      console.log('Search URL state updated to:', searchUrl);
+      const url = await apiService.searchProduct(query);
+      setSearchUrl(url);
+      console.log('API returned URL:', url);
+      console.log('Search URL state updated to:', url);
+      return url;
     } catch (error) {
       console.error('Error searching product:', error);
       showAlert('Error searching product. Please try again.', 'error');

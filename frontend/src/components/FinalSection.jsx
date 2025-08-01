@@ -63,15 +63,16 @@ const FinalSection = ({
     const searchQuery = generatedTitle
     console.log('Search query:', searchQuery);
     
+    let url = '';
     if (onSearchProduct) {
       try {
         console.log('Calling search function...');
-        await onSearchProduct(searchQuery);
-        console.log('Search function completed, got URL:', searchUrl);
+        url = await onSearchProduct(searchQuery);
+        console.log('Search function completed, got URL:', url);
 
         // Immediately open the URL in a new tab
-        if (searchUrl) {
-          window.open(searchUrl, '_blank', 'noopener,noreferrer');
+        if (url) {
+          window.open(url, '_blank', 'noopener,noreferrer');
         } else {
           alert('No search results found. Please try again.');
         }
