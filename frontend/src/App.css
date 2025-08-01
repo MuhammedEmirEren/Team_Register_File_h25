@@ -486,19 +486,6 @@ body::after {
     flex-wrap: wrap;
 }
 
-.hover-hint {
-    color: #667eea;
-    font-size: 0.8rem;
-    font-weight: 500;
-    opacity: 0.8;
-    transition: opacity 0.3s ease;
-}
-
-.image-display:hover + .image-info .hover-hint {
-    opacity: 1;
-    color: #667eea;
-}
-
 .settings-options {
     display: flex;
     flex-direction: column;
@@ -1457,35 +1444,9 @@ body::after {
     .image-preview-actions .btn {
         width: 100%;
     }
-    
-    /* Mobile hover effects - use touch instead */
-    .image-display:hover,
-    .option-image:hover {
-        transform: none;
-    }
-    
-    .image-display:hover img,
-    .option-image:hover img {
-        transform: none;
-    }
-    
-    .image-display:hover::before,
-    .option-image:hover::before {
-        opacity: 0;
-    }
-    
-    .image-display:hover::after,
-    .option-image:hover::after {
-        opacity: 0;
-    }
-    
-    /* Show tap hint for mobile */
-    .hover-hint {
-        content: '💡 Tap to zoom';
-    }
 }
 
-/* Mobile Image Modal Styles */
+/* Image Modal Styles for Final Section */
 .image-modal-overlay {
     position: fixed;
     top: 0;

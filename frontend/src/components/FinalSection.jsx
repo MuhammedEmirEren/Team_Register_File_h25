@@ -11,21 +11,8 @@ const FinalSection = ({
 }) => {
   const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
   const [enhancedDimensions, setEnhancedDimensions] = useState({ width: 0, height: 0 });
-  const [isMobile, setIsMobile] = useState(false);
   const [modalImage, setModalImage] = useState(null);
   const [modalTitle, setModalTitle] = useState('');
-
-  // Check if device is mobile
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
-    checkMobile();
-    window.addEventListener('resize', checkMobile);
-    
-    return () => window.removeEventListener('resize', checkMobile);
-  }, []);
 
   // Helper function to get image dimensions
   const getImageDimensions = (base64Data) => {
@@ -54,13 +41,9 @@ const FinalSection = ({
     }
   }, [enhancedImageData]);
 
-  const zoomHint = isMobile ? '💡 Tap to zoom' : '💡 Hover to zoom';
-
   const handleImageClick = (imageSrc, title) => {
-    if (isMobile) {
-      setModalImage(imageSrc);
-      setModalTitle(title);
-    }
+    setModalImage(imageSrc);
+    setModalTitle(title);
   };
 
   const closeModal = () => {
@@ -79,7 +62,6 @@ const FinalSection = ({
             </div>
             <div className="image-info">
               <span>📏 {originalDimensions.width} x {originalDimensions.height}</span>
-              <span className="hover-hint">{zoomHint}</span>
             </div>
           </div>
           
@@ -90,7 +72,6 @@ const FinalSection = ({
             </div>
             <div className="image-info">
               <span>📏 {enhancedDimensions.width} x {enhancedDimensions.height}</span>
-              <span className="hover-hint">{zoomHint}</span>
             </div>
           </div>
         </div>
@@ -125,7 +106,7 @@ const FinalSection = ({
         </div>
       </div>
 
-      {/* Mobile Image Modal */}
+      {/* Image Modal */}
       {modalImage && (
         <div className="image-modal-overlay" onClick={closeModal}>
           <div className="image-modal" onClick={(e) => e.stopPropagation()}>
