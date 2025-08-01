@@ -403,12 +403,78 @@ body::after {
     align-items: center;
     justify-content: center;
     margin-bottom: 1rem;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.image-display:hover {
+    transform: scale(1.05);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+    z-index: 10;
 }
 
 .image-display img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.image-display:hover img {
+    transform: scale(1.1);
+}
+
+/* Add a subtle glow effect on hover */
+.image-display::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.image-display:hover::before {
+    opacity: 1;
+}
+
+/* Add a zoom indicator */
+.image-display::after {
+    content: '🔍';
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 8px;
+    border-radius: 50%;
+    font-size: 14px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    animation: pulse 2s infinite;
+}
+
+.image-display:hover::after {
+    opacity: 1;
+    transform: scale(1);
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 .image-info {
@@ -417,6 +483,20 @@ body::after {
     gap: 0.5rem;
     color: #718096;
     font-size: 0.9rem;
+    flex-wrap: wrap;
+}
+
+.hover-hint {
+    color: #667eea;
+    font-size: 0.8rem;
+    font-weight: 500;
+    opacity: 0.8;
+    transition: opacity 0.3s ease;
+}
+
+.image-display:hover + .image-info .hover-hint {
+    opacity: 1;
+    color: #667eea;
 }
 
 .settings-options {
@@ -665,12 +745,68 @@ body::after {
     overflow: hidden;
     background: #e2e8f0;
     margin-bottom: 1rem;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+}
+
+.option-image:hover {
+    transform: scale(1.03);
+    box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
 }
 
 .option-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.option-image:hover img {
+    transform: scale(1.08);
+}
+
+/* Add a subtle glow effect on hover for option images */
+.option-image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(45deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.option-image:hover::before {
+    opacity: 1;
+}
+
+/* Add a zoom indicator for option images */
+.option-image::after {
+    content: '🔍';
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 6px;
+    border-radius: 50%;
+    font-size: 12px;
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
+    pointer-events: none;
+    animation: pulse 2s infinite;
+}
+
+.option-image:hover::after {
+    opacity: 1;
+    transform: scale(1);
 }
 
 .option-info {
@@ -1320,5 +1456,108 @@ body::after {
     
     .image-preview-actions .btn {
         width: 100%;
+    }
+    
+    /* Mobile hover effects - use touch instead */
+    .image-display:hover,
+    .option-image:hover {
+        transform: none;
+    }
+    
+    .image-display:hover img,
+    .option-image:hover img {
+        transform: none;
+    }
+    
+    .image-display:hover::before,
+    .option-image:hover::before {
+        opacity: 0;
+    }
+    
+    .image-display:hover::after,
+    .option-image:hover::after {
+        opacity: 0;
+    }
+    
+    /* Show tap hint for mobile */
+    .hover-hint {
+        content: '💡 Tap to zoom';
+    }
+}
+
+/* Mobile Image Modal Styles */
+.image-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 3000;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease;
+}
+
+.image-modal {
+    background: white;
+    border-radius: 20px;
+    max-width: 95vw;
+    max-height: 95vh;
+    width: 90vw;
+    box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
+    animation: slideIn 0.3s ease;
+    overflow: hidden;
+}
+
+.image-modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 2rem;
+    border-bottom: 1px solid #e2e8f0;
+    background: #f8fafc;
+}
+
+.image-modal-header h3 {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2d3748;
+    margin: 0;
+}
+
+.image-modal-content {
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.modal-image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* Mobile responsive for image modal */
+@media (max-width: 768px) {
+    .image-modal {
+        width: 95vw;
+        max-height: 95vh;
+    }
+    
+    .image-modal-header {
+        padding: 1rem 1.5rem;
+    }
+    
+    .image-modal-content {
+        padding: 1rem;
+        max-height: 60vh;
     }
 }
