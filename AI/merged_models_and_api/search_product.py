@@ -97,7 +97,7 @@ class search_product:
             # Update instance results and return current results
             self.results = results
             if not self.results:
-                return first_result
+                results.append(first_result)
             return results
         
         except requests.exceptions.RequestException as e:
