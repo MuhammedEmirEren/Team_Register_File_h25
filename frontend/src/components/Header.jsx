@@ -14,7 +14,7 @@ const Header = () => {
           <h1>GLOWii</h1>
         </div>
         <div className="tagline">
-          <p>Intelligent product preparation for e-commerce</p>
+          <p>Intelligent product preparation for e-commerce &nbsp;&nbsp;</p>
         </div>
       </div>
     </header>

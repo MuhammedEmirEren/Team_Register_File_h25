@@ -1849,3 +1849,113 @@ input[type="range"] {
         flex-direction: column;
     }
 }
+
+/* Camera and Samples Section Layout */
+.camera-and-samples-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.camera-section {
+    flex-shrink: 0;
+    display: flex;
+    align-items: flex-start;
+    padding-top: 0.75rem;
+}
+
+/* Independent Camera Button Styles - First Version Style */
+.camera-button {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 2px dashed #4299e1;
+    background: #f8fafc;
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+    width: 120px;
+    height: 90px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.camera-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.2);
+    border-color: #3182ce;
+    background: rgba(66, 153, 225, 0.05);
+}
+
+.camera-button-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    padding: 10px;
+}
+
+.camera-button .camera-icon {
+    margin-bottom: 6px;
+    transition: all 0.3s ease;
+}
+
+.camera-button:hover .camera-icon {
+    transform: scale(1.1);
+}
+
+.camera-button .camera-text {
+    font-size: 11px;
+    font-weight: 600;
+    color: #4299e1;
+    transition: all 0.3s ease;
+    letter-spacing: 0.3px;
+}
+
+.camera-button:hover .camera-text {
+    color: #3182ce;
+}
+
+/* Ensure sample images section maintains right alignment */
+.camera-and-samples-section .sample-images-section {
+    flex: 1;
+    text-align: right;
+}
+
+.camera-and-samples-section .sample-images-grid {
+    justify-content: flex-end;
+    margin-left: auto;
+}
+
+/* Mobile responsive styles for camera button */
+@media (max-width: 768px) {
+    .camera-and-samples-section {
+        flex-direction: column;
+        gap: 15px;
+    }
+    
+    .camera-button {
+        width: 100px;
+        height: 75px;
+    }
+    
+    .camera-button-content {
+        padding: 8px;
+    }
+    
+    .camera-button .camera-icon span {
+        font-size: 1.8rem !important;
+    }
+    
+    .camera-button .camera-text {
+        font-size: 10px;
+    }
+}
+
+
