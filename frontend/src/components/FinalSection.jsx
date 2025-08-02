@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import CanvasElement from './CanvasElement';
 
 const FinalSection = ({ 
   currentImage, 
@@ -16,6 +17,7 @@ const FinalSection = ({
   const [enhancedDimensions, setEnhancedDimensions] = useState({ width: 0, height: 0 });
   const [modalImage, setModalImage] = useState(null);
   const [modalTitle, setModalTitle] = useState('');
+  const [showCanvas, setShowCanvas] = useState(false);
 
   // Helper function to get image dimensions
   const getImageDimensions = (base64Data) => {
@@ -59,9 +61,7 @@ const FinalSection = ({
       alert('No product information available to search');
       return;
     }
-    
-    // Use the title if available, otherwise use part of the description
-    const searchQuery = generatedTitle
+    const searchQuery = generatedTitle;
     console.log('Search query:', searchQuery);
     
     let url = '';
@@ -70,8 +70,6 @@ const FinalSection = ({
         console.log('Calling search function...');
         url = await onSearchProduct(searchQuery);
         console.log('Search function completed, got URL:', url);
-
-        // Immediately open the URL in a new tab
         if (url) {
           window.open(url, '_blank', 'noopener,noreferrer');
         } else {
@@ -82,6 +80,18 @@ const FinalSection = ({
         alert('Error searching for products. Please try again.');
       }
     }
+  };
+
+  const handleAddWatermark = () => {
+    if (!enhancedImageData) {
+      alert('No enhanced image available to add watermark');
+      return;
+    }
+    setShowCanvas(true);
+  };
+
+  const closeCanvas = () => {
+    setShowCanvas(false);
   };
 
   return (
@@ -156,7 +166,21 @@ const FinalSection = ({
             ➕ Enhance Another Image
           </button>
         </div>
+
+        <div className='watermark-adding'>
+          <button className='btn btn-watermark' onClick={handleAddWatermark}>
+            💧 Add Watermark
+          </button>
+        </div>
       </div>
+
+      {/* Canvas Element for Watermark */}
+      {showCanvas && (
+        <CanvasElement
+          enhancedImageData={enhancedImageData}
+          onClose={closeCanvas}
+        />
+      )}
 
       {/* Image Modal */}
       {modalImage && (

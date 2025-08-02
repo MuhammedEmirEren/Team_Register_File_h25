@@ -81,7 +81,7 @@ export const downloadImage = (imageData, filename) => {
     canvas.height = img.height;
     
     // Apply enhancement filters to canvas
-    ctx.filter = 'brightness(1.1) contrast(1.2) saturate(1.15)';
+    ctx.filter = 'brightness(1) contrast(1) saturate(1)';
     ctx.drawImage(img, 0, 0);
     
     // Create download link
