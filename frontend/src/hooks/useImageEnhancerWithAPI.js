@@ -35,6 +35,7 @@ export const useImageEnhancerWithAPI = () => {
   const [searchUrl, setSearchUrl] = useState('');
   const [isDragOver, setIsDragOver] = useState(false);
   const [uploadedImagePath, setUploadedImagePath] = useState(null);
+  const [isGeneratingDescription, setIsGeneratingDescription] = useState(false);
 
   // Settings state
   const [settings, setSettings] = useState({
@@ -175,8 +176,15 @@ export const useImageEnhancerWithAPI = () => {
       const selectedImageData = enhancedImages[`option${optionNumber}`];
       setEnhancedImageData(selectedImageData.image);
 
+      // Show final section immediately so loading state is visible
+      setShowFinal(true);
+      setShowSelection(false);
+
       if(settings.descriptionGeneration || settings.titleGeneration) {
-    // Generate description if enabled
+        // Set loading state for description generation
+        setIsGeneratingDescription(true);
+        
+        // Generate description if enabled
         showAlert('Generating description...', 'info');
         const response = await apiService.chooseImageAndGenerateDescription(optionNumber);
         console.log('Response from API:', response);
@@ -206,14 +214,13 @@ export const useImageEnhancerWithAPI = () => {
         }*/
       }
       
-      
-      
-      setShowFinal(true);
-      setShowSelection(false);
+      // Clear loading state
+      setIsGeneratingDescription(false);
       
     } catch (error) {
       console.error('Error selecting option:', error);
       showAlert('Error processing selection. Please try again.', 'error');
+      setIsGeneratingDescription(false);
     }
   };
 
@@ -236,6 +243,7 @@ export const useImageEnhancerWithAPI = () => {
     setGeneratedDescription('');
     setSearchUrl('');
     setUploadedImagePath(null);
+    setIsGeneratingDescription(false);
     
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -282,6 +290,7 @@ export const useImageEnhancerWithAPI = () => {
     isDragOver,
     settings,
     fileInputRef,
+    isGeneratingDescription,
     
     // Actions
     handleFileSelect,

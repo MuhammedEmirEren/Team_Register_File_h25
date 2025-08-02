@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import ImagePreviewModal from './ImagePreviewModal';
 
-const SelectionSection = ({ currentImages, onOptionSelect }) => {
+const SelectionSection = ({ currentImages, onOptionSelect, isGeneratingDescription }) => {
   const [previewModal, setPreviewModal] = useState({
     isOpen: false,
     selectedImage: null,
@@ -69,6 +69,7 @@ const SelectionSection = ({ currentImages, onOptionSelect }) => {
         optionNumber={previewModal.optionNumber}
         onCancel={handleCancelPreview}
         onConfirm={handleConfirmSelection}
+        isGeneratingDescription={isGeneratingDescription}
       />
     </section>
   );

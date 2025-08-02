@@ -1014,6 +1014,48 @@ body::after {
     100% { transform: rotate(360deg); }
 }
 
+/* Loading spinner for buttons and generation states */
+.loading-spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-top: 2px solid #ffffff;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-right: 8px;
+}
+
+/* Generation loading state */
+.generation-loading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #667eea;
+    font-style: italic;
+}
+
+.generation-loading .loading-spinner {
+    width: 20px;
+    height: 20px;
+    border-width: 2px;
+    border-color: rgba(102, 126, 234, 0.3);
+    border-top-color: #667eea;
+}
+
+/* Disabled button states */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+
+.btn:disabled:hover {
+    transform: none !important;
+    box-shadow: none !important;
+}
+
 /* Action Buttons */
 .action-buttons {
     display: flex;

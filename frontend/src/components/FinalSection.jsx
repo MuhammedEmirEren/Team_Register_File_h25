@@ -9,7 +9,8 @@ const FinalSection = ({
   searchUrl,
   onDownload, 
   onReset,
-  onSearchProduct
+  onSearchProduct,
+  isGeneratingDescription
 }) => {
   const [originalDimensions, setOriginalDimensions] = useState({ width: 0, height: 0 });
   const [enhancedDimensions, setEnhancedDimensions] = useState({ width: 0, height: 0 });
@@ -113,7 +114,14 @@ const FinalSection = ({
             <div className="generation-item">
               <h4>📝 Title etc.</h4>
               <div className="generation-content">
-                {generatedTitle || 'Generating title...'}
+                {isGeneratingDescription ? (
+                  <div className="generation-loading">
+                    <span className="loading-spinner"></span>
+                    <span>Generating title...</span>
+                  </div>
+                ) : (
+                  generatedTitle || 'No title generated'
+                )}
               </div>
             </div>
           )}
@@ -122,7 +130,14 @@ const FinalSection = ({
             <div className="generation-item">
               <h4>📄 Description etc.</h4>
               <div className="generation-content">
-                {generatedDescription || 'Generating description...'}
+                {isGeneratingDescription ? (
+                  <div className="generation-loading">
+                    <span className="loading-spinner"></span>
+                    <span>Generating description...</span>
+                  </div>
+                ) : (
+                  generatedDescription || 'No description generated'
+                )}
               </div>
             </div>
           )}

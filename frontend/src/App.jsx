@@ -32,6 +32,7 @@ function App() {
     isDragOver,
     settings,
     fileInputRef,
+    isGeneratingDescription,
     
     // Actions
     handleFileSelect,
@@ -105,6 +106,7 @@ function App() {
           <SelectionSection 
             currentImages={enhancedImages}
             onOptionSelect={handleOptionSelect}
+            isGeneratingDescription={isGeneratingDescription}
           />
         )}
 
@@ -120,6 +122,7 @@ function App() {
             onDownload={handleDownload}
             onReset={resetApplication}
             onSearchProduct={getSearchUrl}
+            isGeneratingDescription={isGeneratingDescription}
           />
         )}
 

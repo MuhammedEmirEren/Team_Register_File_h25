@@ -5,7 +5,8 @@ const ImagePreviewModal = ({
   selectedImage, 
   optionNumber, 
   onCancel, 
-  onConfirm 
+  onConfirm,
+  isGeneratingDescription
 }) => {
   if (!isOpen) return null;
 
@@ -37,14 +38,23 @@ const ImagePreviewModal = ({
           <button 
             className="btn btn-secondary"
             onClick={onCancel}
+            disabled={isGeneratingDescription}
           >
             Cancel
           </button>
           <button 
             className="btn btn-primary"
             onClick={onConfirm}
+            disabled={isGeneratingDescription}
           >
-            Confirm Selection
+            {isGeneratingDescription ? (
+              <>
+                <span className="loading-spinner"></span>
+                Generating Descriptions...
+              </>
+            ) : (
+              'Confirm Selection'
+            )}
           </button>
         </div>
       </div>
