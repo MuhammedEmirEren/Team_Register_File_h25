@@ -9,10 +9,11 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
     const [position, setPosition] = useState({ x: 50, y: 50 });
     const canvasRef = useRef(null);
     const [isWatermarkAdded, setIsWatermarkAdded] = useState(false);
+    const [opacity, setOpacity] = useState(1);
 
     useEffect(() => {
         drawCanvas();
-    }, [text, fontSize, fontColor, fontType, rotation, position, enhancedImageData]);
+    }, [text, fontSize, fontColor, fontType, rotation, position, enhancedImageData, opacity]);
 
     const drawCanvas = () => {
         const canvas = canvasRef.current;
@@ -32,7 +33,8 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
                 ctx.font = `${fontSize}px ${fontType}`;
                 ctx.fillStyle = fontColor;
                 ctx.lineWidth = 1;
-        
+                ctx.globalAlpha = opacity;
+
                 ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
                 ctx.shadowOffsetX = 2;
                 ctx.shadowOffsetY = 2;
@@ -160,7 +162,19 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
                             />
                             <span>{rotation}°</span>
                         </div>
-                        
+
+                        <div className="control-group">
+                            <label>Opacity:</label>
+                            <input
+                                type="range"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                                value={opacity}
+                                onChange={(e) => setOpacity(parseFloat(e.target.value))}
+                            />
+                        </div>
+
                         <div className="action-buttons">
                             <button className="btn btn-secondary" onClick={drawWatermark}>Apply Watermark</button>
                             <button className="btn btn-primary" onClick={handleDownload}>Download Image</button>
