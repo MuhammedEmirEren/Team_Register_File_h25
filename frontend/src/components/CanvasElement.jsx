@@ -239,27 +239,19 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
                             style={{ border: '1px solid #ccc', cursor: 'crosshair' }}
                         ></canvas>
                         <p className="canvas-hint">💡 Click on the canvas to position your watermarks</p>
-                        
-                        {/* Positioning Mode Selector */}
-                        <div className="positioning-mode-selector">
-                            <label>Positioning Mode:</label>
-                            <select 
-                                value={positioningMode} 
-                                onChange={(e) => setPositioningMode(e.target.value)}
-                                className="positioning-mode-select"
-                            >
-                                <option value="text" disabled={!text}>Text Watermark</option>
-                                <option value="svg" disabled={!svgImageRef.current}>SVG Watermark</option>
-                            </select>
-                        </div>
+                        <p className="canvas-hint">💡 Click on a watermark section to select which one to position</p>
                     </div>
 
                     <div className="controls-panel">
                         {/* Watermark Controls - Side by Side Layout */}
                         <div className="watermark-controls-layout">
                             {/* Text Watermark Controls */}
-                            <div className="watermark-controls text-watermark-controls">
-                                <h4 className="control-section-title">📝 Text Watermark</h4>
+                            <div 
+                                className={`watermark-controls text-watermark-controls ${positioningMode === 'text' ? 'selected' : ''}`}
+                                onClick={() => text && setPositioningMode('text')}
+                                style={{ cursor: text ? 'pointer' : 'default' }}
+                            >
+                                <h4 className="control-section-title">📝 Text Watermark {positioningMode === 'text' && text ? '✓' : ''}</h4>
                                 <div className="control-group">
                                     <label>Text:</label>
                                     <input
@@ -330,8 +322,12 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
                             </div>
 
                             {/* SVG Watermark Controls */}
-                            <div className="watermark-controls svg-watermark-controls">
-                                <h4 className="control-section-title">🖼️ SVG Watermark</h4>
+                            <div 
+                                className={`watermark-controls svg-watermark-controls ${positioningMode === 'svg' ? 'selected' : ''}`}
+                                onClick={() => svgImageRef.current && setPositioningMode('svg')}
+                                style={{ cursor: svgImageRef.current ? 'pointer' : 'default' }}
+                            >
+                                <h4 className="control-section-title">🖼️ SVG Watermark {positioningMode === 'svg' && svgImageRef.current ? '✓' : ''}</h4>
                                 <div className="control-group">
                                     <label>SVG File:</label>
                                     <input
