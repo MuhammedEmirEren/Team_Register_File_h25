@@ -326,6 +326,11 @@ class process_image:
             tone = "professional"
             lang = "en"
             self.description = self.generate_description_from_image(img_b64, tone, lang)
+
+
+            if len(self.description) > 15000:
+                self.description = self.description[:15000] + "..."
+
             return self.description
         except Exception as e:
             print(f"Error in generate_description: {str(e)}")
