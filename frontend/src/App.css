@@ -1757,7 +1757,7 @@ body::after {
 }
 
 .controls-panel {
-    flex: 0 0 300px;
+    flex: 0 0 320px;
     display: flex;
     flex-direction: column;
     gap: 1.5rem;
@@ -1765,6 +1765,71 @@ body::after {
     padding: 1.5rem;
     border-radius: 12px;
     border: 1px solid #e2e8f0;
+    max-height: 70vh;
+    overflow-y: auto;
+}
+
+.watermark-type-selector {
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 1rem;
+    margin-bottom: 1rem;
+}
+
+.watermark-type-selector label {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin-bottom: 0.5rem;
+}
+
+.watermark-toggles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.toggle-label {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 6px;
+    transition: background-color 0.3s ease;
+}
+
+.toggle-label:hover {
+    background-color: rgba(66, 153, 225, 0.1);
+}
+
+.toggle-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #4299e1;
+    cursor: pointer;
+}
+
+.toggle-text {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
+.control-section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #2d3748;
+    margin: 0 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.watermark-controls {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+    padding: 1rem 0;
 }
 
 .control-group {
@@ -1777,6 +1842,9 @@ body::after {
     font-weight: 600;
     color: #2d3748;
     font-size: 0.9rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .control-row {
@@ -1787,41 +1855,142 @@ body::after {
 
 .text-input,
 .font-select {
-    padding: 0.5rem;
+    padding: 0.75rem;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.9rem;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.text-input:focus,
+.font-select:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
 }
 
 .color-input {
-    width: 50px;
-    height: 35px;
+    width: 60px;
+    height: 40px;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
+    background: white;
 }
 
 .type-input {
-    padding: 0.5rem;
+    padding: 0.75rem;
     border: 1px solid #e2e8f0;
-    border-radius: 6px;
+    border-radius: 8px;
     font-size: 0.9rem;
+    background: white;
+    transition: border-color 0.3s ease;
+}
+
+.type-input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+/* SVG File Input Styles */
+.file-input {
+    padding: 0.75rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    background: white;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.file-input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.1);
+}
+
+.file-input::-webkit-file-upload-button {
+    background: #4299e1;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    margin-right: 0.5rem;
+    transition: background-color 0.3s ease;
+}
+
+.file-input::-webkit-file-upload-button:hover {
+    background: #3182ce;
+}
+
+.file-name {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: #4a5568;
+    font-style: italic;
+    word-break: break-all;
+    padding: 0.5rem;
+    background: rgba(66, 153, 225, 0.1);
+    border-radius: 4px;
+    border-left: 3px solid #4299e1;
 }
 
 input[type="range"] {
     width: 100%;
     margin: 0.5rem 0;
+    height: 6px;
+    border-radius: 3px;
+    background: #e2e8f0;
+    outline: none;
+    -webkit-appearance: none;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #4299e1;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+input[type="range"]::-webkit-slider-thumb:hover {
+    background: #3182ce;
+}
+
+input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: #4299e1;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .action-buttons {
     display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e2e8f0;
 }
 
 .action-buttons .btn {
     flex: 1;
     min-width: auto;
+    padding: 0.75rem 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
 /* Mobile responsive for canvas modal */
@@ -1839,6 +2008,7 @@ input[type="range"] {
     
     .controls-panel {
         flex: none;
+        max-height: 50vh;
     }
     
     .control-row {
