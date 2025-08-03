@@ -45,15 +45,27 @@ def pil_image_to_base64(pil_image):
     img_str = base64.b64encode(buffer.getvalue()).decode()
     return f"data:image/jpeg;base64,{img_str}"
 
-def apply_background(image: Image.Image, background: str = 'white') -> Image.Image:
-    """Apply a solid background (white or black) to an RGBA image"""
+def apply_background(image: Image.Image, background: str) -> Image.Image:
+    """Apply a given base64 background image to an RGBA image"""
     if image.mode != 'RGBA':
         image = image.convert("RGBA")
 
-    bg_color = (255, 255, 255) if background.lower() == 'white' else (0, 0, 0)
-    background_image = Image.new("RGB", image.size, bg_color)
-    background_image.paste(image, mask=image.split()[3])  # Use alpha channel as mask
-    return background_image
+    try:
+        # Decode the base64 background image
+        background_data = base64.b64decode(background.split(",")[1])  # Remove the "data:image/...;base64," prefix
+        background_image = Image.open(BytesIO(background_data))
+
+        # Ensure the background image matches the size of the input image
+        background_image = background_image.resize(image.size)
+
+        # Paste the input image (with transparency) on top of the background
+        combined_image = Image.new("RGB", image.size)
+        combined_image.paste(background_image, (0, 0))
+        combined_image.paste(image, (0, 0), mask=image.split()[3])  # Use alpha channel as mask
+
+        return combined_image
+    except Exception as e:
+        raise ValueError(f"Error applying background: {str(e)}")
 
 @app.post("/upload")
 async def upload_image(image: UploadFile = File(...)):

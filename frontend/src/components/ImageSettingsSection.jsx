@@ -20,6 +20,53 @@ const ImageSettingsSection = ({
     });
   };
 
+  const handleBackgroundImageClick = (imagePath) => {
+    //convert imagepath to base64 to give backend
+    fetch(imagePath.src)
+      .then(response => response.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          onSettingChange({
+            ...settings,
+            background: {background_id: imagePath.id, background_base64: reader.result}
+          });
+        };
+        reader.readAsDataURL(blob);
+        console.log('Background image set:', reader.result);
+        console.log('Settings updated:', {settings});
+      })
+      .catch(error => {
+        console.error('Error loading background image:', error);
+      });
+  };
+
+  const sampleImages = [
+    {
+      id: 1,
+      src: '/bg_1.jpeg',
+      alt: 'Sample Background 1'
+    },
+    {
+      id: 2,
+      src: '/bg_2.jpeg',
+      alt: 'Sample Background 2'
+    },
+    {
+      id: 3,
+      src: '/bg_3.jpeg',
+      alt: 'Sample Background 3'
+    },
+    {id: 4,
+      src: '/bg_4.jpg',
+      alt: 'Sample Background 4'
+    },
+    {id: 5,
+      src: '/bg_5.jpg',
+      alt: 'Sample Background 5'
+    }
+  ];
+
   return (
     <section className="image-settings-section">
       <div className="image-settings-container">
@@ -37,12 +84,23 @@ const ImageSettingsSection = ({
           <h3>⚙️ Choose Settings</h3>
           <div className="settings-options">
             <div className="setting-item">
-              <label>Background: {settings.background === 'black' ? 'Black' : 'White'}</label>
-              <div 
-                className={`toggle ${settings.background === 'black' ? 'active' : ''}`}
-                onClick={toggleBackground}
-              >
-                <div className="toggle-slider"></div>
+              <label>Background: </label>
+              <div className="sample-images-grid">
+                {sampleImages.map((image) => (
+                  <div 
+                    key={image.id}
+                    className={`sample-image-card ${settings.background.background_id === image.id ? 'selected' : ''}`}
+                    onClick={() => handleBackgroundImageClick(image)}
+                  >
+                    <div className="sample-image-container">
+                      <img 
+                        src={image.src} 
+                        alt={image.alt}
+                        className="sample-image"
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
             

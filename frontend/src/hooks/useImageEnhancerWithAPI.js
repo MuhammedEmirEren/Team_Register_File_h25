@@ -39,7 +39,7 @@ export const useImageEnhancerWithAPI = () => {
 
   // Settings state
   const [settings, setSettings] = useState({
-    background: 'white',
+    background: {background_id: 1, background_base64: null},
     titleGeneration: true,
     descriptionGeneration: true
   });
@@ -135,7 +135,7 @@ export const useImageEnhancerWithAPI = () => {
       setCurrentStep(3);
       
       // Call your actual API
-      const response = await apiService.enhanceImage(uploadedImagePath, settings.background);
+      const response = await apiService.enhanceImage(uploadedImagePath, settings.background.background_base64);
       
       // Get dimensions for each enhanced image
       const dimensions1 = await getImageDimensions(response.enhanced_image_1);

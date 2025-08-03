@@ -1958,4 +1958,7 @@ input[type="range"] {
     }
 }
 
-
+.sample-image-card.selected {
+  border: 2px solid #007bff; /* Example: Blue border */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Example: Glow effect */
+}
