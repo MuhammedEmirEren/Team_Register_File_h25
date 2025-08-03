@@ -370,6 +370,55 @@ body::after {
     display: none;
 }
 
+/* AI Generation Option Styles */
+.sample-image-card.ai-option {
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-color: #667eea;
+    color: white;
+}
+
+.sample-image-card.ai-option:hover {
+    background: linear-gradient(135deg, #764ba2, #667eea);
+    border-color: #764ba2;
+    transform: translateY(-6px);
+    box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.ai-container {
+    background: transparent !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+}
+
+.ai-icon {
+    font-size: 1.5rem;
+    animation: pulse 2s infinite;
+}
+
+.ai-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.1;
+}
+
+.sample-image-card.ai-option.selected {
+    background: linear-gradient(135deg, #48bb78, #38a169);
+    border-color: #48bb78;
+}
+
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
+}
+
 @media (max-width: 768px) {
     .sample-images-grid {
         gap: 0.5rem;

@@ -101,6 +101,14 @@ const ImageSettingsSection = ({
                     </div>
                   </div>
                 ))}
+                <div className="sample-image-card ai-option">
+                  <div className="sample-image-container ai-container">
+                    <div className="ai-icon">
+                      🤖
+                    </div>
+                    <span className="ai-label">Generate With AI</span>
+                  </div>
+                </div>
               </div>
             </div>
             
