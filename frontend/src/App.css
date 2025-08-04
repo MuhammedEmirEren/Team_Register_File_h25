@@ -1798,6 +1798,55 @@ body::after {
     display: flex;
     flex-direction: column;
     align-items: center;
+    gap: 1rem;
+}
+
+.canvas-scroll-wrapper {
+    max-width: 600px;
+    max-height: 500px;
+    overflow: auto;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: #f8fafc;
+    padding: 1rem;
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.canvas-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 400px;
+}
+
+.zoom-controls {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    background: white;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    width: 100%;
+}
+
+.zoom-controls label {
+    font-weight: 600;
+    color: #2d3748;
+    font-size: 0.9rem;
+}
+
+.zoom-controls input[type="range"] {
+    width: 100%;
+}
+
+.btn-small {
+    padding: 0.5rem 1rem;
+    font-size: 0.8rem;
+    border-radius: 6px;
 }
 
 .canvas-hint {
@@ -2041,6 +2090,11 @@ input[type="range"]::-moz-range-thumb {
         flex-direction: column;
         padding: 1rem;
         gap: 1rem;
+    }
+    
+    .canvas-scroll-wrapper {
+        max-width: 90vw;
+        max-height: 300px;
     }
     
     .controls-panel {

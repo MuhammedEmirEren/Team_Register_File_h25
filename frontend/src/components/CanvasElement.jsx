@@ -23,6 +23,10 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
     // Positioning mode for individual watermark control
     const [positioningMode, setPositioningMode] = useState('text'); // 'text' or 'svg'
 
+    // Canvas display and scaling states
+    const [canvasScale, setCanvasScale] = useState(1);
+    const [canvasSize, setCanvasSize] = useState({ width: 800, height: 600 });
+
     // Cache for base image
     const baseImageRef = useRef(null);
     const svgImageRef = useRef(null);
@@ -36,6 +40,21 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
             const img = new Image();
             img.onload = () => {
                 baseImageRef.current = img;
+                
+                // Calculate canvas size based on image dimensions
+                const maxDisplaySize = 800;
+                const aspectRatio = img.width / img.height;
+                
+                let displayWidth, displayHeight;
+                if (img.width > img.height) {
+                    displayWidth = Math.min(img.width, maxDisplaySize);
+                    displayHeight = displayWidth / aspectRatio;
+                } else {
+                    displayHeight = Math.min(img.height, maxDisplaySize);
+                    displayWidth = displayHeight * aspectRatio;
+                }
+                
+                setCanvasSize({ width: displayWidth, height: displayHeight });
                 drawCanvas();
             };
             img.src = enhancedImageData;
@@ -64,34 +83,43 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
             drawCanvas();
         }
     }, [text, fontSize, fontColor, fontType, rotation, position, opacity, 
-        svgSize, svgRotation, svgOpacity, svgPosition, svgAspectRatio]);
+        svgSize, svgRotation, svgOpacity, svgPosition, svgAspectRatio, canvasScale, canvasSize]);
 
     const drawCanvas = () => {
         const canvas = canvasRef.current;
         if (!canvas || !baseImageRef.current) return;
         
         const ctx = canvas.getContext('2d');
+        const img = baseImageRef.current;
+
+        // Set canvas size to actual image dimensions for high quality
+        canvas.width = img.width;
+        canvas.height = img.height;
 
         // Clear canvas
         ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-        // Draw base image
-        ctx.drawImage(baseImageRef.current, 0, 0, canvas.width, canvas.height);
+        // Draw base image at full resolution
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+        
+        // Calculate scale factor for positioning based on display size vs actual size
+        const scaleX = canvas.width / canvasSize.width;
+        const scaleY = canvas.height / canvasSize.height;
         
         // Draw text watermark
         if (text) {
             ctx.save();
-            ctx.translate(position.x, position.y);
+            ctx.translate(position.x * scaleX, position.y * scaleY);
             ctx.rotate((rotation * Math.PI) / 180);
-            ctx.font = `${fontSize}px ${fontType}`;
+            ctx.font = `${fontSize * scaleX}px ${fontType}`;
             ctx.fillStyle = fontColor;
             ctx.lineWidth = 1;
             ctx.globalAlpha = opacity;
 
             ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
-            ctx.shadowOffsetX = 2;
-            ctx.shadowOffsetY = 2;
-            ctx.shadowBlur = 4;
+            ctx.shadowOffsetX = 2 * scaleX;
+            ctx.shadowOffsetY = 2 * scaleY;
+            ctx.shadowBlur = 4 * scaleX;
             
             ctx.fillText(text, 0, 0);
             ctx.restore();
@@ -100,13 +128,14 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
         // Draw SVG watermark
         if (svgImageRef.current) {
             ctx.save();
-            ctx.translate(svgPosition.x, svgPosition.y);
+            ctx.translate(svgPosition.x * scaleX, svgPosition.y * scaleY);
             ctx.rotate((svgRotation * Math.PI) / 180);
             ctx.globalAlpha = svgOpacity;
             
-            // Calculate height based on aspect ratio to prevent stretching
-            const height = svgSize / svgAspectRatio;
-            ctx.drawImage(svgImageRef.current, 0, 0, svgSize, height);
+            // Calculate height based on aspect ratio and scale
+            const scaledSize = svgSize * scaleX;
+            const height = scaledSize / svgAspectRatio;
+            ctx.drawImage(svgImageRef.current, 0, 0, scaledSize, height);
             ctx.restore();
         }
     };
@@ -168,6 +197,9 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
         setSvgPosition({ x: 100, y: 100 });
         setSvgAspectRatio(1);
         
+        // Reset canvas scale
+        setCanvasScale(1);
+        
         // Reset positioning mode
         setPositioningMode('text');
         
@@ -186,6 +218,21 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
                 const img = new Image();
                 img.onload = () => {
                     baseImageRef.current = img;
+                    
+                    // Recalculate canvas size
+                    const maxDisplaySize = 800;
+                    const aspectRatio = img.width / img.height;
+                    
+                    let displayWidth, displayHeight;
+                    if (img.width > img.height) {
+                        displayWidth = Math.min(img.width, maxDisplaySize);
+                        displayHeight = displayWidth / aspectRatio;
+                    } else {
+                        displayHeight = Math.min(img.height, maxDisplaySize);
+                        displayWidth = displayHeight * aspectRatio;
+                    }
+                    
+                    setCanvasSize({ width: displayWidth, height: displayHeight });
                     drawCanvas();
                 };
                 img.src = enhancedImageData;
@@ -201,11 +248,11 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        // Scale coordinates to canvas size
-        const scaleX = canvas.width / rect.width;
-        const scaleY = canvas.height / rect.height;
-        const scaledX = x * scaleX;
-        const scaledY = y * scaleY;
+        // Scale coordinates to canvas display size, then to actual canvas size
+        const displayScaleX = canvasSize.width / rect.width;
+        const displayScaleY = canvasSize.height / rect.height;
+        const scaledX = x * displayScaleX;
+        const scaledY = y * displayScaleY;
         
         // Position based on the selected mode
         if (positioningMode === 'text' && text) {
@@ -231,15 +278,42 @@ const CanvasElement = ({ enhancedImageData, onClose }) => {
                 
                 <div className="canvas-content">
                     <div className="canvas-container">
-                        <canvas
-                            ref={canvasRef}
-                            width={500}
-                            height={500}
-                            onClick={handleMouseDown}
-                            style={{ border: '1px solid #ccc', cursor: 'crosshair' }}
-                        ></canvas>
+                        <div className="canvas-scroll-wrapper">
+                            <canvas
+                                ref={canvasRef}
+                                width={baseImageRef.current ? baseImageRef.current.width : 800}
+                                height={baseImageRef.current ? baseImageRef.current.height : 600}
+                                onClick={handleMouseDown}
+                                style={{ 
+                                    border: '1px solid #ccc', 
+                                    cursor: 'crosshair',
+                                    width: `${canvasSize.width * canvasScale}px`,
+                                    height: `${canvasSize.height * canvasScale}px`,
+                                    imageRendering: 'auto'
+                                }}
+                            ></canvas>
+                        </div>
+                        <div className="canvas-controls">
+                            <div className="zoom-controls">
+                                <label>Canvas Zoom: {Math.round(canvasScale * 100)}%</label>
+                                <input
+                                    type="range"
+                                    min="0.5"
+                                    max="3"
+                                    step="0.1"
+                                    value={canvasScale}
+                                    onChange={(e) => setCanvasScale(parseFloat(e.target.value))}
+                                />
+                                <button 
+                                    className="btn btn-secondary"
+                                    onClick={() => setCanvasScale(1)}
+                                >
+                                    Reset Zoom
+                                </button>
+                            </div>
+                        </div>
                         <p className="canvas-hint">💡 Click on the canvas to position your watermarks</p>
-                        <p className="canvas-hint">💡 Click on a watermark section to select which one to position</p>
+                        <p className="canvas-hint">🔍 Use the zoom slider to make the canvas bigger for precise positioning</p>
                     </div>
 
                     <div className="controls-panel">
