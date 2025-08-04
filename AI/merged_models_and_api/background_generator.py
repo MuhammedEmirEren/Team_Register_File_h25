@@ -80,7 +80,21 @@ class BackgroundGenerator:
                 inline_data = chunk.candidates[0].content.parts[0].inline_data
                 data_buffer = inline_data.data
                 file_extension = mimetypes.guess_extension(inline_data.mime_type)
-                self.save_binary_file(r"C:\Users\Lenovo\OneDrive\Masaüstü\Hackathon\Team_Register_File_h25\frontend\public\Generated_Background.png", data_buffer)
-                return r"C:\Users\Lenovo\OneDrive\Masaüstü\Hackathon\Team_Register_File_h25\frontend\public\Generated_Background.png"
+
+                script_dir = os.path.dirname(os.path.abspath(__file__))
+                project_root = os.path.dirname(os.path.dirname(script_dir))  # Go up 2 levels from merged_models_and_api
+                
+                # Path to frontend public folder
+                frontend_public = os.path.join(project_root, "frontend", "public")
+                
+                # Create the directory if it doesn't exist
+                os.makedirs(frontend_public, exist_ok=True)
+                
+                # Save to frontend public folder
+                output_path = os.path.join(frontend_public, "Generated_Background.png")
+
+
+                self.save_binary_file(output_path, data_buffer)
+                return output_path
             else:
                 print(chunk.text)
