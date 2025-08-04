@@ -255,7 +255,35 @@ async def get_search_results(query:str):
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f"Error searching: {str(e)}")
+    
+@app.post("/generate_background")
+async def generate_background(promptFromUser: str):
+    """Generate a background image using Google GenAI"""
+    try:
+        from background_generator import BackgroundGenerator
+        background_gen = BackgroundGenerator()
+        print("Generating background image...")
+        image_path = background_gen.generate(prompt=promptFromUser)
+        print("Background image generated successfully.")
+        
+        if not os.path.exists(image_path):
+            raise HTTPException(status_code=404, detail="Generated background image not found")
+        
+        with Image.open(image_path) as img:
+            if img.mode != 'RGB':
+                img = img.convert('RGB')
 
+            encoded_image = pil_image_to_base64(img)
+            if encoded_image is None:
+                raise HTTPException(status_code=500, detail="Error converting image to base64")
+            return {"image": encoded_image}
+            
+    except Exception as e:
+        print(f"Error generating background: {str(e)}")
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f"Error generating background: {str(e)}")
+    
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="127.0.0.1", port=8001)
