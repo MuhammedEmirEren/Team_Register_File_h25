@@ -14,6 +14,7 @@ const ImageSettingsSection = ({
   };
 
   const closeGenerationPanel = () => {
+    handleBackgroundImageClick({id: 6, src: '/Generated_Background.png', alt: 'Sample Background 6'});
     setShowGeneration(false);
   };
 
@@ -68,7 +69,11 @@ const ImageSettingsSection = ({
     {id: 5,
       src: '/bg_5.jpg',
       alt: 'Sample Background 5'
-    }
+    },
+    {id: 6,
+      src: `/Generated_Background.png?${Date.now()}`,
+      alt: 'Sample Background 6'
+    },
   ];
 
   return (

@@ -4,13 +4,13 @@ const FeaturesSection = () => {
   const features = [
     {
       icon: '👁️',
-      title: 'Smart Analysis',
-      description: 'Our Model analyzes your image to identify areas that need enhancement'
+      title: 'Smart Object Detection',
+      description: 'Our Model analyzes your image to identify key objects for e-commerce'
     },
     {
       icon: '🧠',
-      title: 'AI Decision Making',
-      description: 'Advanced algorithms determine the optimal enhancement strategy for each unique image'
+      title: 'AI Powered Background Generation',
+      description: 'Generates a background according to your instructions using AI'
     },
     {
       icon: '✨',

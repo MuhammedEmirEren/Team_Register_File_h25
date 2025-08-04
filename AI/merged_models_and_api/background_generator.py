@@ -80,7 +80,7 @@ class BackgroundGenerator:
                 inline_data = chunk.candidates[0].content.parts[0].inline_data
                 data_buffer = inline_data.data
                 file_extension = mimetypes.guess_extension(inline_data.mime_type)
-                self.save_binary_file("Generated_Background.png", data_buffer)
-                return "Generated_Background.png"
+                self.save_binary_file(r"C:\Users\Lenovo\OneDrive\Masaüstü\Hackathon\Team_Register_File_h25\frontend\public\Generated_Background.png", data_buffer)
+                return r"C:\Users\Lenovo\OneDrive\Masaüstü\Hackathon\Team_Register_File_h25\frontend\public\Generated_Background.png"
             else:
                 print(chunk.text)
