@@ -59,7 +59,7 @@ const ImageSettingsSection = ({
     },
     {
       id: 3,
-      src: '/bg_3.jpeg',
+      src: '/bg_3.jpg',
       alt: 'Sample Background 3'
     },
     {id: 4,
@@ -67,12 +67,8 @@ const ImageSettingsSection = ({
       alt: 'Sample Background 4'
     },
     {id: 5,
-      src: '/bg_5.jpg',
-      alt: 'Sample Background 5'
-    },
-    {id: 6,
       src: `/Generated_Background.png?${Date.now()}`,
-      alt: 'Sample Background 6'
+      alt: 'Sample Background 5'
     },
   ];
 
