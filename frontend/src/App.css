@@ -150,7 +150,7 @@ body::after {
 /* Header Styles */
 .header {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
+    /* Removed backdrop-filter to prevent stacking context issues */
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
     padding: 1.5rem 0;
     margin-bottom: 2rem;
@@ -1248,10 +1248,44 @@ body::after {
 /* Footer */
 .footer {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(20px);
+    /* Removed backdrop-filter to prevent stacking context issues */
     border-top: 1px solid rgba(255, 255, 255, 0.2);
     padding: 2rem 0;
     margin-top: 3rem;
+    z-index: 1;
+}
+
+/* Ensure all backdrop-filter elements stay below modal */
+*[style*="backdrop-filter"] {
+    z-index: 1 !important;
+}
+
+/* Force modal to be above everything */
+.canvas-overlay {
+    isolation: isolate;
+}
+
+/* Ensure modal content is always on top */
+.canvas-modal,
+.canvas-modal * {
+    z-index: inherit;
+}
+
+/* Ensure all containers with backdrop-filter stay below modal */
+.upload-container,
+.image-settings-container,
+.processing-container,
+.selection-container,
+.final-container,
+.features-container {
+    z-index: 1 !important;
+    /* Removed backdrop-filter to prevent stacking context issues */
+}
+
+/* Ensure modal is always on top */
+.canvas-overlay,
+.canvas-modal {
+    z-index: 999999 !important;
 }
 
 .footer-content {
@@ -1295,7 +1329,7 @@ body::after {
     align-items: center;
     justify-content: center;
     z-index: 1000;
-    backdrop-filter: blur(10px);
+    /* Removed backdrop-filter to prevent stacking context issues */
 }
 
 .modal-content {
@@ -1511,7 +1545,7 @@ body::after {
     align-items: center;
     justify-content: center;
     z-index: 2000;
-    backdrop-filter: blur(8px);
+    /* Removed backdrop-filter to prevent stacking context issues */
     animation: fadeIn 0.3s ease;
 }
 
@@ -1657,7 +1691,7 @@ body::after {
     align-items: center;
     justify-content: center;
     z-index: 3000;
-    backdrop-filter: blur(10px);
+    /* Removed backdrop-filter to prevent stacking context issues */
     animation: fadeIn 0.3s ease;
 }
 
@@ -1733,9 +1767,10 @@ body::after {
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
-            backdrop-filter: blur(10px);
+            z-index: 999999 !important;
+            /* Removed backdrop-filter to prevent stacking context issues */
             animation: fadeIn 0.3s ease;
+            isolation: isolate;
         }
 
 .canvas-modal {
@@ -1747,6 +1782,8 @@ body::after {
     box-shadow: 0 25px 80px rgba(0, 0, 0, 0.4);
     animation: slideIn 0.3s ease;
     overflow: hidden;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 .canvas-header {
@@ -1756,6 +1793,8 @@ body::after {
     padding: 1.5rem 2rem;
     border-bottom: 1px solid #e2e8f0;
     background: #f8fafc;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 .canvas-header h3 {
@@ -1791,6 +1830,8 @@ body::after {
     gap: 2rem;
     max-height: 80vh;
     overflow-y: auto;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 .canvas-container {
@@ -1869,6 +1910,8 @@ body::after {
     border: 1px solid #e2e8f0;
     max-height: 70vh;
     overflow-y: auto;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 .watermark-controls-layout {
@@ -2068,6 +2111,8 @@ input[type="range"]::-moz-range-thumb {
     margin-top: 1.5rem;
     padding-top: 1rem;
     border-top: 1px solid #e2e8f0;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 .action-buttons .btn {
@@ -2077,6 +2122,8 @@ input[type="range"]::-moz-range-thumb {
     font-weight: 600;
     border-radius: 8px;
     transition: all 0.3s ease;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 /* Mobile responsive for canvas modal */
@@ -2162,6 +2209,8 @@ input[type="range"]::-moz-range-thumb {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 .preview-container {
@@ -2169,6 +2218,8 @@ input[type="range"]::-moz-range-thumb {
     overflow: hidden;
     border: 2px solid #e2e8f0;
     background: #f8fafc;
+    z-index: 999999 !important;
+    position: relative;
 }
 
 .preview-image {
