@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import apiService from '../services/apiService';
 
 const BackgroundGenerationElement = ({ onClose, onBackgroundGenerated }) => {
@@ -39,7 +40,7 @@ const BackgroundGenerationElement = ({ onClose, onBackgroundGenerated }) => {
         onClose();
     };
 
-    return (
+    const modalContent = (
         <div className="canvas-overlay">
             <div className="canvas-modal">
                 <div className="canvas-header">
@@ -139,6 +140,8 @@ const BackgroundGenerationElement = ({ onClose, onBackgroundGenerated }) => {
             </div>
         </div>
     );
+
+    return createPortal(modalContent, document.body);
 };
 
 export default BackgroundGenerationElement;
