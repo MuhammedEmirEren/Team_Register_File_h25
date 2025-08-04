@@ -1,4 +1,5 @@
 import React from 'react';
+import BackgroundGenerationElement from './BackgroundGenerationElement';
 
 const ImageSettingsSection = ({ 
   currentImage, 
@@ -6,6 +7,16 @@ const ImageSettingsSection = ({
   onSettingChange, 
   onEnhance 
 }) => {
+  const [showGeneration, setShowGeneration] = React.useState(false);
+
+  const showGenerationPanel = (show) => {
+    setShowGeneration(show);
+  };
+
+  const closeGenerationPanel = () => {
+    setShowGeneration(false);
+  };
+
   const toggleSetting = (setting) => {
     onSettingChange({
       ...settings,
@@ -101,7 +112,7 @@ const ImageSettingsSection = ({
                     </div>
                   </div>
                 ))}
-                <div className="sample-image-card ai-option">
+                <div className="sample-image-card ai-option" onClick={() => showGenerationPanel(true)}>
                   <div className="sample-image-container ai-container">
                     <div className="ai-icon">
                       🤖
@@ -136,6 +147,12 @@ const ImageSettingsSection = ({
           </button>
         </div>
       </div>
+      {showGeneration && (
+      <BackgroundGenerationElement
+        onClose={closeGenerationPanel}
+        onBackgroundGenerated={handleBackgroundGenerated}
+      />
+      )}
     </section>
   );
 };

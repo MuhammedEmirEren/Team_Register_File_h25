@@ -139,6 +139,23 @@ class ApiService {
       throw error;
     }
   }
+
+  async generateBackgroundImage(prompt) {
+    try {
+      const response = await fetch(`${this.baseURL}/generate_background`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ prompt }),
+      });
+      const data = await response.json();
+      return data.image;
+    } catch (error) {
+      console.error('Error generating background image:', error);
+      throw error;
+    }
+  }
 }
 
 export default new ApiService();
