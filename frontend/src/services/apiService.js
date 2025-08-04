@@ -142,12 +142,8 @@ class ApiService {
 
   async generateBackgroundImage(prompt) {
     try {
-      const response = await fetch(`${this.baseURL}/generate_background`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ prompt }),
+      const response = await fetch(`${this.baseURL}/generate_background?promptFromUser=${encodeURIComponent(prompt)}`, {
+        method: 'POST'
       });
       const data = await response.json();
       return data.image;

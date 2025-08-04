@@ -150,7 +150,6 @@ const ImageSettingsSection = ({
       {showGeneration && (
       <BackgroundGenerationElement
         onClose={closeGenerationPanel}
-        onBackgroundGenerated={handleBackgroundGenerated}
       />
       )}
     </section>
