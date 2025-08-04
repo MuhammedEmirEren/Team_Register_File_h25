@@ -27,7 +27,7 @@ processors = {}
 
 class ImageEnhancementRequest(BaseModel):
     image_path: str
-    background: str = 'white'  # Default background color
+    background: str
 
 class ImageSelectionRequest(BaseModel):
     image_path: str

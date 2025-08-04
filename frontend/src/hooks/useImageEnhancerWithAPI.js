@@ -1,6 +1,14 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { showAlert, delay, validateFile, downloadImage } from '../utils/helpers';
 import apiService from '../services/apiService';
+
+const sampleImage= 
+    {
+      id: 1,
+      src: '/bg_1.jpeg',
+      alt: 'Sample Background 1'
+    };
+
 
 // Helper function to get image dimensions from base64 data
 const getImageDimensions = (base64Data) => {
@@ -43,6 +51,35 @@ export const useImageEnhancerWithAPI = () => {
     titleGeneration: true,
     descriptionGeneration: true
   });
+
+  const getDefaultBackground = (imagePath) => {
+    fetch(imagePath.src)
+        .then(response => response.blob())
+        .then(blob => {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setSettings(prevSettings => ({
+              ...prevSettings,
+              background: {
+                ...prevSettings.background,
+                background_base64: reader.result
+              }
+            }));
+          };
+          reader.readAsDataURL(blob);
+        })
+        .catch(error => {
+          console.error('Error loading background image:', error);
+        });
+    return ;
+  };
+
+  useEffect(() => {
+    // Set default background image when component mounts
+    if (sampleImage && sampleImage.src) {
+      getDefaultBackground(sampleImage);
+    }
+  }, []);
   
   const fileInputRef = useRef(null);
 

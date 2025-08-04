@@ -24,13 +24,6 @@ const ImageSettingsSection = ({
     });
   };
 
-  const toggleBackground = () => {
-    onSettingChange({
-      ...settings,
-      background: settings.background === 'black' ? 'white' : 'black'
-    });
-  };
-
   const handleBackgroundImageClick = (imagePath) => {
     //convert imagepath to base64 to give backend
     fetch(imagePath.src)
