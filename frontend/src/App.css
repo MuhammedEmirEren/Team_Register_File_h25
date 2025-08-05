@@ -156,6 +156,7 @@ body::after {
     margin-bottom: 2rem;
     position: relative;
     overflow: hidden;
+    z-index: 0 !important;
 }
 
 .header::before {

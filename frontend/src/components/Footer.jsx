@@ -4,10 +4,10 @@ const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-content">
-        <p>&nbsp;&nbsp;&copy; 2025 BTK Hackathon - Team Register File - E-Commerce - Product .</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&copy; 2025 BTK Hackathon - Team Register File - E-Commerce - Product .</p>
         <div className="footer-links">
           <a href="https://github.com/MuhammedEmirEren/Team_Register_File_h25" target="_blank" rel="noopener noreferrer">🐙 GitHub</a>
-          <a href="/about" rel="noopener noreferrer">ℹ️ About</a>
+          <a href="/about" rel="noopener noreferrer">ℹ️ About &nbsp;&nbsp;&nbsp;&nbsp;</a>
         </div>
       </div>
     </footer>
