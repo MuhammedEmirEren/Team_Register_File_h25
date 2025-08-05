@@ -1,5 +1,5 @@
 # 🚀 AI-Powered Product Enhancement Platform
-### BTK Akademi Hackathon 2025 - Winner Project
+### BTK Akademi Hackathon 2025
 
 <div align="center">
 
@@ -73,30 +73,11 @@ A **comprehensive AI platform** that automates the entire product photography wo
 ### AI Engine (Python + FastAPI)
 ```
 ├── 🧠 OpenCV for image processing
-├── 🎯 YOLO for object detection
+├── 🎯 AI for object detection
 ├── 🎨 PIL for image manipulation
 ├── 🤖 Gemini AI for content generation
 └── ⚡ FastAPI for high-performance API
 ```
-
----
-
-## 📊 Performance Metrics
-
-<div align="center">
-
-| Metric | Performance |
-|--------|-------------|
-| 🚀 **Processing Speed** | < 3 seconds per image |
-| 🎯 **Object Detection Accuracy** | 95%+ |
-| 📱 **Mobile Responsiveness** | 100% |
-| ⚡ **API Response Time** | < 500ms |
-| 🔄 **Uptime** | 99.9% |
-
-</div>
-
----
-
 ## 🚀 Quick Start Guide
 
 ### Prerequisites
@@ -126,8 +107,8 @@ python rf_ai_api.py
 ```
 
 ### 🌐 Access Points
-- **Frontend**: http://localhost:5173
-- **AI API**: http://localhost:8000
+- **Frontend**: http://localhost:3000
+- **AI API**: http://localhost:8001
 
 ---
 
@@ -137,6 +118,7 @@ python rf_ai_api.py
 - Drag & drop or browse to select
 - Supports JPG, PNG, JPEG formats
 - Real-time file validation
+- Choose background or generate one
 
 ### Step 2: AI Enhancement
 - Choose enhancement level (Gentle/Aggressive)
@@ -153,10 +135,8 @@ python rf_ai_api.py
 - Marketing descriptions
 - Product search URLs
 
-### Step 5: Download & Share
+### Step 5: Download
 - High-quality image download
-- Multiple format support
-- Batch processing support
 ---
 
 ## 🏗️ Project Structure
@@ -227,26 +207,10 @@ python rf_ai_api.py
 
 ---
 
-## 👥 Team
-
-<div align="center">
-
-| Role | Responsibility |
-|------|---------------|
-| 🎨 **Frontend Lead** | React Development & UI/UX |
-| 🤖 **AI Engineer** | Machine Learning & Computer Vision |
-| 🎯 **Full Stack** | Integration & DevOps |
-
-</div>
-
----
-
 ### 🌐 Links
 [![GitHub](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/MuhammedEmirEren/Team_Register_File_h25)
 
 </div>
-
-### 🌟 **Star this repository if you found it helpful!** ⭐
 
 **Made with ❤️ by Team RegisterFile for BTK Akademi Hackathon 2025**
 
