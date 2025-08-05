@@ -8,6 +8,8 @@ const ImageSettingsSection = ({
   onEnhance 
 }) => {
   const [showGeneration, setShowGeneration] = React.useState(false);
+  const [modalImage, setModalImage] = React.useState(null);
+  const [modalTitle, setModalTitle] = React.useState('');
 
   const showGenerationPanel = (show) => {
     setShowGeneration(show);
@@ -23,6 +25,16 @@ const ImageSettingsSection = ({
       ...settings,
       [setting]: !settings[setting]
     });
+  };
+
+  const handleImageClick = (imageSrc, title) => {
+    setModalImage(imageSrc);
+    setModalTitle(title);
+  };
+
+  const closeModal = () => {
+    setModalImage(null);
+    setModalTitle('');
   };
 
   const handleBackgroundImageClick = (imagePath) => {
@@ -77,7 +89,7 @@ const ImageSettingsSection = ({
       <div className="image-settings-container">
         <div className="image-panel">
           <h3>🖼️ Original Image</h3>
-          <div className="image-display">
+          <div className="image-display" onClick={() => handleImageClick(currentImage, 'Original Image')}>
             <img src={currentImage} alt="Original" />
           </div>
           <div className="image-info">
@@ -145,6 +157,19 @@ const ImageSettingsSection = ({
       <BackgroundGenerationElement
         onClose={closeGenerationPanel}
       />
+      )}
+      {modalImage && (
+        <div className="image-modal-overlay" onClick={closeModal}>
+          <div className="image-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="image-modal-header">
+              <h3>{modalTitle}</h3>
+              <button className="modal-close-btn" onClick={closeModal}>✕</button>
+            </div>
+            <div className="image-modal-content">
+              <img src={modalImage} alt={modalTitle} className="modal-image" />
+            </div>
+          </div>
+        </div>
       )}
     </section>
   );

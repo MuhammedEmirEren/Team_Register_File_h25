@@ -157,11 +157,11 @@ const FinalSection = ({
           <button className="btn btn-primary" onClick={onDownload}>
             💾 Download Enhanced Image
           </button>
-          
-          <button className="btn btn-secondary" onClick={handleSearchProduct}>
-            🔍 Search & View Similar Products
-          </button>
-          
+          {(settings.descriptionGeneration || settings.titleGeneration) && (
+            <button className="btn btn-secondary" onClick={handleSearchProduct}>
+              🔍 Search & View Similar Products
+            </button>
+          )}
           <button className="btn btn-secondary" onClick={onReset}>
             ➕ Enhance Another Image
           </button>
