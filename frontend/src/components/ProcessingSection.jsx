@@ -38,8 +38,8 @@ const ProcessingSection = ({ currentStep }) => {
                 🧠
               </div>
               <div className="step-content">
-                <h5>Deciding Enhancements</h5>
-                <p>Choosing optimal enhancement strategy...</p>
+                <h5>Detecting Object</h5>
+                <p>AI is identifying objects within the image...</p>
               </div>
               <div className="step-status">
                 {getStepIcon(2)}
