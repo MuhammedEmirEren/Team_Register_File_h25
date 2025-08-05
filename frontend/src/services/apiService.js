@@ -145,8 +145,20 @@ class ApiService {
       const response = await fetch(`${this.baseURL}/generate_background?promptFromUser=${encodeURIComponent(prompt)}`, {
         method: 'POST'
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
-      return data.image;
+      console.log('API response data:', data); // Debug log
+      
+      return {
+        image: data.image,
+        filePath: data.file_path,
+        publicUrl: data.public_url,
+        fileName: data.file_name
+      };
     } catch (error) {
       console.error('Error generating background image:', error);
       throw error;

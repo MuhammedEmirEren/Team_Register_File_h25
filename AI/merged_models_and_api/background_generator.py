@@ -1,6 +1,8 @@
 import base64
 import mimetypes
 import os
+import time
+import uuid
 from google import genai
 from google.genai import types
 from dotenv import load_dotenv
@@ -55,6 +57,9 @@ class BackgroundGenerator:
             ],
         )
 
+        timestamp = int(time.time())
+        unique_id = str(uuid.uuid4())
+
         file_index = 0
         for chunk in client.models.generate_content_stream(
             model=model,
@@ -68,7 +73,6 @@ class BackgroundGenerator:
             ):
                 continue
             if chunk.candidates[0].content.parts[0].inline_data and chunk.candidates[0].content.parts[0].inline_data.data:
-                file_name = "Generated_Background"
                 inline_data = chunk.candidates[0].content.parts[0].inline_data
                 data_buffer = inline_data.data
                 file_extension = mimetypes.guess_extension(inline_data.mime_type)
@@ -82,11 +86,17 @@ class BackgroundGenerator:
                 # Create the directory if it doesn't exist
                 os.makedirs(frontend_public, exist_ok=True)
                 
-                # Save to frontend public folder
-                output_path = os.path.join(frontend_public, "Generated_Background.png")
-
+                unique_filename = f"background_{timestamp}_{unique_id[:8]}{file_extension}"
+                output_path = os.path.join(frontend_public, unique_filename)
 
                 self.save_binary_file(output_path, data_buffer)
-                return output_path
+                
+                # Return both the full path and the public URL path
+                public_url = f"/backgrounds/{unique_filename}"
+                return {
+                    'file_path': output_path,
+                    'public_url': public_url,
+                    'file_name': unique_filename
+                }
             else:
                 print(chunk.text)

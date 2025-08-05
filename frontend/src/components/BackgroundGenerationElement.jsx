@@ -4,6 +4,9 @@ import apiService from '../services/apiService';
 
 const BackgroundGenerationElement = ({ onClose, onBackgroundGenerated }) => {
     const [generatedImage, setGeneratedImage] = useState(null);
+    const [public_url, setPublicUrl] = useState(null);
+    const [file_name, setFileName] = useState(null);
+    const [file_path, setFilePath] = useState(null);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const inputRef = useRef(null);
@@ -20,8 +23,11 @@ const BackgroundGenerationElement = ({ onClose, onBackgroundGenerated }) => {
         setError(null);
         
         try {
-            const image = await apiService.generateBackgroundImage(prompt);
+            const { image, filePath, publicUrl, fileName } = await apiService.generateBackgroundImage(prompt);
             setGeneratedImage(image);
+            setPublicUrl(publicUrl);
+            setFileName(fileName);
+            setFilePath(filePath);
         } catch (error) {
             console.error('Error generating image:', error);
             setError('Failed to generate background image. Please try again.');
@@ -34,7 +40,10 @@ const BackgroundGenerationElement = ({ onClose, onBackgroundGenerated }) => {
         if (generatedImage && onBackgroundGenerated) {
             onBackgroundGenerated({
                 background_id: 'ai_generated',
-                background_base64: generatedImage
+                background_base64: generatedImage,
+                background_public_url: public_url,
+                background_file_name: file_name,
+                background_file_path: file_path
             });
         }
         onClose();
@@ -104,7 +113,12 @@ const BackgroundGenerationElement = ({ onClose, onBackgroundGenerated }) => {
                                     </button>
                                     <button 
                                         className="btn btn-secondary" 
-                                        onClick={() => setGeneratedImage(null)}
+                                        onClick={() => {
+                                            setGeneratedImage(null);
+                                            setPublicUrl(null);
+                                            setFileName(null);
+                                            setFilePath(null);
+                                        }}
                                     >
                                         Generate New One
                                     </button>

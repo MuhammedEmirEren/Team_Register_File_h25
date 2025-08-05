@@ -263,7 +263,10 @@ async def generate_background(promptFromUser: str):
         from background_generator import BackgroundGenerator
         background_gen = BackgroundGenerator()
         print("Generating background image...")
-        image_path = background_gen.generate(prompt=promptFromUser)
+        result = background_gen.generate(prompt=promptFromUser)
+        image_path = result.get("file_path")
+        public_url = result.get("public_url")
+        file_name = result.get("file_name")
         print("Background image generated successfully.")
         
         if not os.path.exists(image_path):
@@ -276,7 +279,9 @@ async def generate_background(promptFromUser: str):
             encoded_image = pil_image_to_base64(img)
             if encoded_image is None:
                 raise HTTPException(status_code=500, detail="Error converting image to base64")
-            return {"image": encoded_image}
+            return {"image": encoded_image
+                    , "public_url": public_url, "file_name": file_name
+                    , "file_path": image_path}
             
     except Exception as e:
         print(f"Error generating background: {str(e)}")

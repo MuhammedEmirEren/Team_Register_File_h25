@@ -16,7 +16,24 @@ const ImageSettingsSection = ({
   };
 
   const closeGenerationPanel = () => {
-    handleBackgroundImageClick({id: 6, src: '/Generated_Background.png', alt: 'Sample Background 6'});
+    setShowGeneration(false);
+  };
+
+  const handleGeneratedBackground = (backgroundData) => {
+    // backgroundData contains: 
+    // { background_id, background_base64, background_public_url, background_file_name, background_file_path }
+    console.log('Generated background data:', backgroundData);
+    console.log('File path:', backgroundData.background_file_path);
+    console.log('Public URL:', backgroundData.background_public_url);
+    console.log('File name:', backgroundData.background_file_name);
+    
+    // Update the settings with the generated background
+    onSettingChange({
+      ...settings,
+      generatedBackground: backgroundData
+    });
+    
+    // Close the generation panel
     setShowGeneration(false);
   };
 
@@ -38,6 +55,17 @@ const ImageSettingsSection = ({
   };
 
   const handleBackgroundImageClick = (imagePath) => {
+    // Check if the image source is already a base64 data URL (for generated images)
+    if (imagePath.src.startsWith('data:')) {
+      // It's already a base64 data URL, no need to fetch
+      onSettingChange({
+        ...settings,
+        background: {background_id: imagePath.id, background_base64: imagePath.src}
+      });
+      console.log('Background image set (base64):', imagePath.src);
+      return;
+    }
+    
     //convert imagepath to base64 to give backend
     fetch(imagePath.src)
       .then(response => response.blob())
@@ -78,8 +106,9 @@ const ImageSettingsSection = ({
       src: '/bg_4.jpg',
       alt: 'Sample Background 4'
     },
-    {id: 5,
-      src: `/Generated_Background.png?${Date.now()}`,
+    {
+      id: 5,
+      src: settings.generatedBackground?.background_base64 || '/bg_5.jpg',
       alt: 'Sample Background 5'
     },
   ];
@@ -106,7 +135,7 @@ const ImageSettingsSection = ({
                 {sampleImages.map((image) => (
                   <div 
                     key={image.id}
-                    className={`sample-image-card ${settings.background.background_id === image.id ? 'selected' : ''}`}
+                    className={`sample-image-card ${settings.background?.background_id === image.id || (settings.background?.background_id === 'ai_generated' && image.id === 5) ? 'selected' : ''}`}
                     onClick={() => handleBackgroundImageClick(image)}
                   >
                     <div className="sample-image-container">
@@ -156,6 +185,7 @@ const ImageSettingsSection = ({
       {showGeneration && (
       <BackgroundGenerationElement
         onClose={closeGenerationPanel}
+        onBackgroundGenerated={handleGeneratedBackground}
       />
       )}
       {modalImage && (
