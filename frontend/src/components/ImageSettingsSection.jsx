@@ -1,5 +1,6 @@
 import React from 'react';
 import BackgroundGenerationElement from './BackgroundGenerationElement';
+import ImageShowcaseModal from './ImageShowcaseModal';
 
 const ImageSettingsSection = ({ 
   currentImage, 
@@ -119,7 +120,8 @@ const ImageSettingsSection = ({
         <div className="image-panel">
           <h3>🖼️ Original Image</h3>
           <div className="image-display" onClick={() => handleImageClick(currentImage, 'Original Image')}>
-            <img src={currentImage} alt="Original" />
+            <img src={currentImage} alt="Original" 
+            />
           </div>
           <div className="image-info">
             <span>📏 Image loaded</span>
@@ -189,17 +191,10 @@ const ImageSettingsSection = ({
       />
       )}
       {modalImage && (
-        <div className="image-modal-overlay" onClick={closeModal}>
-          <div className="image-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="image-modal-header">
-              <h3>{modalTitle}</h3>
-              <button className="modal-close-btn" onClick={closeModal}>✕</button>
-            </div>
-            <div className="image-modal-content">
-              <img src={modalImage} alt={modalTitle} className="modal-image" />
-            </div>
-          </div>
-        </div>
+      <ImageShowcaseModal
+        selectedImage={modalImage}
+        onCancel ={closeModal}
+      />
       )}
     </section>
   );

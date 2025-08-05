@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import CanvasElement from './CanvasElement';
+import ImageShowcaseModal from './ImageShowcaseModal';
 
 const FinalSection = ({ 
   currentImage, 
@@ -184,17 +185,10 @@ const FinalSection = ({
 
       {/* Image Modal */}
       {modalImage && (
-        <div className="image-modal-overlay" onClick={closeModal}>
-          <div className="image-modal" onClick={(e) => e.stopPropagation()}>
-            <div className="image-modal-header">
-              <h3>{modalTitle}</h3>
-              <button className="modal-close-btn" onClick={closeModal}>✕</button>
-            </div>
-            <div className="image-modal-content">
-              <img src={modalImage} alt={modalTitle} className="modal-image" />
-            </div>
-          </div>
-        </div>
+      <ImageShowcaseModal
+        selectedImage={modalImage}
+        onCancel ={closeModal}
+      />
       )}
     </section>
   );
