@@ -1,5 +1,5 @@
 // API service for communicating with FastAPI backend
-const API_BASE_URL = 'https://muhammedemireren-glowii.hf.space/';
+const API_BASE_URL = 'http://127.0.0.1:8001';
 
 class ApiService {
   constructor() {
