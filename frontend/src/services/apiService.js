@@ -21,43 +21,8 @@ class ApiService {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json(); // This data now contains base64
-      
-      console.log('Upload response data:', data); // Debug log to see the structure
-      
-      // Save base64 image to public folder
-      const base64Image = data.image || data;
-      if (base64Image) {
-        const fileName = `uploaded_${Date.now()}.png`;
-        const publicPath = `/${fileName}`;
-        
-        try {
-          // Convert base64 to blob
-          const base64Data = base64Image.replace(/^data:image\/[a-z]+;base64,/, '');
-          const byteCharacters = atob(base64Data);
-          const byteNumbers = new Array(byteCharacters.length);
-          for (let i = 0; i < byteCharacters.length; i++) {
-            byteNumbers[i] = byteCharacters.charCodeAt(i);
-          }
-          const byteArray = new Uint8Array(byteNumbers);
-          const blob = new Blob([byteArray], { type: 'image/png' });
-          
-          // Save to public folder (this creates a downloadable link)
-          const link = document.createElement('a');
-          link.href = URL.createObjectURL(blob);
-          link.download = fileName;
-          
-          // Save the image data to localStorage for persistence
-          localStorage.setItem(`image_${fileName}`, base64Image);
-          
-          return publicPath; // Return the public path
-        } catch (error) {
-          console.error('Error saving image to public folder:', error);
-          return base64Image; // Fallback to base64 if saving fails
-        }
-      }
-      
-      return data;
+      const data = await response.json();
+      return data.file_path; // Returns the path where the file was saved
     } catch (error) {
       console.error('Error uploading image:', error);
       throw error;
