@@ -4,6 +4,7 @@
 We used another repository to deployment changes: https://github.com/MuhammedEmirEren/register_file_hackathon_ai_part_deployment
 
 Live Demo: https://register-file-hackathon-ai-part-dep.vercel.app/
+(Note: From our enhancement models, our option 2 is using finegrain-image-enhancer model and in the demo sometimes it does not work effectively with free tier usage. However, it works as expected locally.)
 
 <div align="center">
 
@@ -87,6 +88,25 @@ A **comprehensive AI platform** that automates the entire product photography wo
 ### Prerequisites
 - Node.js 18+ 
 - Python 3.11+
+
+### Requirements 
+
+fastapi
+uvicorn
+gradio
+python-multipart
+pillow
+torch
+transformers
+numpy
+opencv-python-headless
+requests
+pydantic
+python-dotenv
+google-generativeai
+langchain-google-genai
+rembg
+onnxruntime
 
 ### Installation
 
