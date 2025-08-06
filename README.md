@@ -1,6 +1,10 @@
 # 🚀 AI-Powered Product Enhancement Platform
 ### BTK Akademi Hackathon 2025
 
+We used another repository to deployment changes: https://github.com/MuhammedEmirEren/register_file_hackathon_ai_part_deployment
+
+Live Demo: https://register-file-hackathon-ai-part-dep.vercel.app/
+
 <div align="center">
 
 [![React](https://img.shields.io/badge/React-18.2.0-61DAFB?style=for-the-badge&logo=react)](https://reactjs.org/)
